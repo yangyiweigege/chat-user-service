@@ -64,7 +64,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- 配置对chat-common的依赖 -->
+		<!-- 配置对chat-common的依赖 集成了基础依赖 -->
 		<dependency>
 			<groupId>com.chat.springboot</groupId>
 			<artifactId>chat-common</artifactId>
