@@ -1,0 +1,56 @@
+eureka:
+ client:
+   serviceUrl:
+    defaultZone: http://localhost:8761/eureka/
+server:
+  #context-path: /spring-mybatis 不要随便起名字 否则注册完后 无法被发现
+  port: 8123
+spring:
+  #配置服务追踪
+  #zipkin:
+   # base-url: http://localhost:9411
+  application:
+    name: chat-user-service
+  #配置mybatis-yml文件生效
+  profiles:
+    active: mybatis
+  #配置mongodb
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/spring-boot
+  #配置redis
+  redis:
+    database: 0
+    host: 192.168.31.71
+    port: 6379
+    timeout: 0
+    password: password
+    pool:
+      #最大连接数
+      max-active: 8 
+      #阻塞时间
+      max-wait: -1 
+      #最大空闲
+      max-idle: 8 
+      #最小空闲
+      min-idle: 0 
+  #配置热部署工具   
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: templates/**
+  #配置activeMQ
+  #activemq:
+    #broker-url: tcp://localhost:61616
+   # user: admin
+    #password: admin
+    #in-memory: true
+  #  pool:
+    #  enabled: false
+
+#配置日志
+logging:
+  path: /com/yangyiwei
+  level:
+    com.chat.springboot: debug
