@@ -15,6 +15,8 @@ import com.chat.springboot.common.request.HttpRequestUtil;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
 
+import io.swagger.annotations.Api;
+
 /**
  * <pre>
  * 功       能: 远程调用别的服务
@@ -24,6 +26,7 @@ import com.chat.springboot.common.response.ResultStatus;
  * Q    Q: 2873824885
  * </pre>
  */
+@Api(value = "rest-request-controoler", description = "远程调用控制层")
 @RestController
 @RequestMapping("/rest/request")
 public class RestRequestController {

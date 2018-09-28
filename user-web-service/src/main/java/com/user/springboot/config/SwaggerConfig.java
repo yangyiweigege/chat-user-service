@@ -25,7 +25,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.chat.springboot.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.user.springboot.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

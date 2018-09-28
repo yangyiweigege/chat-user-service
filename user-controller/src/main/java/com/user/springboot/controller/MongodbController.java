@@ -13,6 +13,8 @@ import com.user.springboot.domain.Person;
 import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.service.PersonService;
+
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
  * Q    Q: 2873824885
  * </pre>
  */
+@Api(value = "mongodb-controoler", description = "mongodb控制层")
 @RestController
 @RequestMapping("/mongodb")
 public class MongodbController {

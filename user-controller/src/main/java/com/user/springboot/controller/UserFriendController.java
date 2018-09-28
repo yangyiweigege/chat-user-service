@@ -16,6 +16,7 @@ import com.user.springboot.service.UserFriendService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -36,8 +37,10 @@ public class UserFriendController {
 	private RedisService redisService;
 
 	@ApiOperation(value = "用户添加好友")
-	@ApiImplicitParam(name = "friendId", value = "要添加的好友id", required = true, dataType = "String", paramType = "query")
-	@RequestMapping(value = "/add", method = { RequestMethod.POST, RequestMethod.GET })
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "friendId", value = "要添加的好友id", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "token", value = "用户令牌", required = false, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/add", method = { RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token", "friendId" })
 	public ResponseResult<?> addFirend(String friendId, String token) {
 		UserInfo userInfo = redisService.getUserInfoByToken(token);
@@ -45,8 +48,10 @@ public class UserFriendController {
 	}
 
 	@ApiOperation(value = "用户删除好友")
-	@ApiImplicitParam(name = "friendId", value = "要删除的好友id", required = true, dataType = "String", paramType = "query")
-	@RequestMapping(value = "/remove", method = { RequestMethod.POST, RequestMethod.GET })
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "friendId", value = "要删除的好友id", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "token", value = "用户令牌", required = false, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/remove", method = { RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token", "friendId" })
 	public ResponseResult<?> removeFirend(String friendId, String token) {
 		UserInfo userInfo = redisService.getUserInfoByToken(token);
@@ -54,11 +59,10 @@ public class UserFriendController {
 	}
 
 	@ApiOperation(value = "查询用户好友列表")
-	@ApiImplicitParam(name = "session", value = "session", required = false, dataType = "String", paramType = "query")
+	@ApiImplicitParam(name = "token", value = "用户令牌", required = false, dataType = "String", paramType = "query")
 	@RequestMapping(value = "/list", method = { RequestMethod.POST, RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token" })
 	public ResponseResult<List<UserInfo>> getFriendListByUid(String token) {
-
 		List<UserInfo> userInfos = userFriendService.getFriendListByUid(redisService.getUserInfoByToken(token).getId());
 		return new ResponseResult<>(ResultStatus.SUCCESS, userInfos);
 	}

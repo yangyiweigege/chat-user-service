@@ -1,4 +1,5 @@
 package com.user.springboot.controller;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -18,7 +19,9 @@ import com.user.springboot.domain.UserInfo;
 import com.user.springboot.service.RedisService;
 import com.user.springboot.service.UserInfoService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -28,6 +31,7 @@ import io.swagger.annotations.ApiOperation;
  * @date 2018年7月2日
  * @time 下午4:36:35
  */
+@Api(value = "user-info-controller", description = "用户信息控制层")
 @RestController
 @RequestMapping("/user/info")
 public class UserInfoController {
@@ -65,7 +69,7 @@ public class UserInfoController {
 	 * @return
 	 */
 	@ApiOperation(value = "用户登陆")
-	@ApiImplicitParam(name = "userInfo", value = "用户信息", required = true, dataType = "UserInfo")
+	@ApiImplicitParam(name = "userInfo", value = "用户信息", required = true, dataType = "UserInfo", paramType = "form")
 	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
 	public ResponseResult<?> login(@Valid UserInfo userInfo, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) { // spring-boot自带的校验
@@ -85,7 +89,10 @@ public class UserInfoController {
 	 * @return
 	 */
 	@ApiOperation(value = "修改用户签名")
-	@ApiImplicitParam(name = "sign", value = "用户签名", required = true, dataType = "String", paramType = "query")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "sign", value = "用户签名", required = true, dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "token", value = "用户令牌", required = true, dataType = "String", paramType = "query")
+	})
 	@RequestMapping(value = "/edit/sign", method = { RequestMethod.POST, RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token" })
 	public ResponseResult<?> editSign(String sign, String token) {
@@ -102,8 +109,8 @@ public class UserInfoController {
 	 * @return
 	 */
 	@ApiOperation(value = "根据用户id获取获取信息")
-	@ApiImplicitParam(name = "session", value = "session", required = true, dataType = "String", paramType = "query")
-	@RequestMapping(value = "/load/one", method = { RequestMethod.POST, RequestMethod.GET })
+	@ApiImplicitParam(name = "token", value = "用户令牌", required = true, dataType = "String", paramType = "query")
+	@RequestMapping(value = "/load/one", method = { RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token" })
 	public ResponseResult<UserInfo> loadOne(String token) {
 		UserInfo userInfo = redisService.getUserInfoByToken(token);
