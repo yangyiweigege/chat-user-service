@@ -60,8 +60,8 @@ public class PersonServiceBean implements PersonService {
 	}
 
 	@Override
-	public Result<Object> findByPage(Integer pageSize, Integer pageNo) {
-		Result<Object> result = new Result<Object>();
+	public Result<PageBean<Person>> findByPage(Integer pageSize, Integer pageNo) {
+		Result<PageBean<Person>> result = new Result<PageBean<Person>>();
 		PageBean<Person> pageBean = new PageBean<Person>();//
 		pageBean.setCurrentPage(pageNo);
 		pageBean.setPageSize(pageSize);

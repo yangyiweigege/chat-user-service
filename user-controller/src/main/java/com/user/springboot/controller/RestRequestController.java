@@ -33,7 +33,7 @@ public class RestRequestController {
 
 	@Autowired
 	private RestTemplate restTemplate;// 服务调用
-	//@Autowired
+	// @Autowired
 	private HttpRequestUtil httpRequest;
 
 	/**

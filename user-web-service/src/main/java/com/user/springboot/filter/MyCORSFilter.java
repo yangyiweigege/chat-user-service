@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  * @author yangyiwei
  *
  */
-//@WebFilter(filterName = "myCORSFilter", urlPatterns = "/*")
+@WebFilter(filterName = "myCORSFilter", urlPatterns = "/*")
 public class MyCORSFilter implements Filter {
 
 	private final static Logger logger = Logger.getLogger(MyCORSFilter.class);

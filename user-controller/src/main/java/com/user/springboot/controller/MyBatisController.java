@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.excel.ExcelUtil;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.Result;
@@ -34,6 +35,12 @@ public class MyBatisController {
 	private UserService userService;
 	@Value("${server.port}")
 	private String port;
+	
+	@RequestMapping(value = "/generate")
+	public ResponseResult<?> generate() {
+		String string = "{\"name\":\"yangyiwei\"}";
+		return new ResponseResult<String>(ResultStatus.SUCCESS, string);
+	}
 
 	@RequestMapping(value = "/json")
 	public ResponseResult<?> getJSON(@RequestBody JSONObject jsonObject) {
@@ -41,11 +48,21 @@ public class MyBatisController {
 		jsonObject.put("port", port);
 		return new ResponseResult<JSONObject>(ResultStatus.SUCCESS, jsonObject);
 	}
+	
+	/**
+	 * 测试嵌套事务 比如serviceA中 调用a方法 a方法继续调用b方法 看能否回滚 的确可以回滚
+	 * @return
+	 */
+	@RequestMapping(value = "/transaction", method = {RequestMethod.GET, RequestMethod.POST})
+	@ValidateAttribute(attributes = {"userName"})
+	public ResponseResult<?> testInnerTransaction(User user) {
+		System.out.println("业务层：" + userService.getClass().getName());
+		return new ResponseResult<JSONObject>(userService.save(user));
+	}
 
 	@RequestMapping(value = "/save", method = { RequestMethod.GET, RequestMethod.POST })
-	public Result<Object> saveUser(User user) throws Exception {
-		Result<Object> result = userService.save(user);
-		return result;
+	public ResponseResult<?> saveUser(User user) throws Exception {
+		return new ResponseResult<>(userService.save(user));
 	}
 
 	@RequestMapping(value = "/list/{currentPage}", method = { RequestMethod.GET, RequestMethod.POST })

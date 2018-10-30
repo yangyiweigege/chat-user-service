@@ -53,4 +53,4 @@ spring:
 logging:
   path: /com/yangyiwei
   level:
-    com.chat.springboot: debug
+    com.user.springboot: debug

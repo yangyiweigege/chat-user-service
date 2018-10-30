@@ -1,5 +1,6 @@
 package com.user.springboot.service;
 import com.user.springboot.domain.Person;
+import com.chat.springboot.common.PageBean;
 import com.chat.springboot.common.response.Result;
 
 public interface PersonService {
@@ -44,6 +45,6 @@ public interface PersonService {
 	 * @param pageNo
 	 * @return
 	 */
-	public Result<Object> findByPage(Integer pageSize, Integer pageNo);
+	public Result<PageBean<Person>> findByPage(Integer pageSize, Integer pageNo);
 
 }

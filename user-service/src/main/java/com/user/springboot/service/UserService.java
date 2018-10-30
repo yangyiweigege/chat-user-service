@@ -3,6 +3,7 @@ package com.user.springboot.service;
 import java.util.List;
 
 import com.chat.springboot.common.response.Result;
+import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.domain.User;
 /**
  * <pre>
@@ -25,7 +26,7 @@ public interface UserService {
 	 * </pre>
 	 * @throws Exception 
 	 */
-	public Result<Object> save(User user) throws Exception;
+	public ResultStatus save(User user);
 
 	/**
 	 * <pre>

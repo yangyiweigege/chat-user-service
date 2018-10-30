@@ -1,19 +1,28 @@
 package com.user.springboot.controller;
+import java.util.List;
+
 import javax.validation.Valid;
+
+import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chat.springboot.common.PageBean;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.annotation.ValidatePage;
 import com.user.springboot.domain.Person;
+import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
+import com.mongodb.BasicDBObject;
 import com.user.springboot.service.PersonService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,6 +43,8 @@ import io.swagger.annotations.ApiOperation;
 public class MongodbController {
 	@Autowired
 	private PersonService personService;
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	/**
 	 * 新增一个人
@@ -115,9 +126,16 @@ public class MongodbController {
 	@ApiImplicitParams(value = {
 			@ApiImplicitParam(name = "pageSize", value = "分页尺寸", required = false, dataType = "Integer", paramType = "query"),
 			@ApiImplicitParam(name = "pageNo", value = "当前页数", required = false, dataType = "Integer", paramType = "query") })
-	public Result<Object> findByPage(Integer pageSize, Integer pageNo) {
+	public Result<PageBean<Person>> findByPage(Integer pageSize, Integer pageNo) {
 		return personService.findByPage(pageSize, pageNo);
 	}
 	
-
+	@RequestMapping(value = "/template")
+	public ResponseResult<?> mongoDBTemplateOid() {
+		Query query = new Query();
+		query.addCriteria(new Criteria().and("_id").is("5b7ea3a93713660080efc229"));
+		List<BasicDBObject> bsonObject = mongoTemplate.find(query, BasicDBObject.class, "log");
+		System.out.println(bsonObject);
+		return new ResponseResult<>(ResultStatus.SUCCESS, bsonObject);
+	}
 }

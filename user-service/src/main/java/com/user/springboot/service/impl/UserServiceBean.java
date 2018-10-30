@@ -21,8 +21,8 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
-@Transactional
-public class UserServiceBean implements UserService{
+//@Transactional
+public class UserServiceBean implements UserService {
 	@Resource
 	private UserMapper userMapper;
 	@Value("${server.port}")
@@ -30,11 +30,22 @@ public class UserServiceBean implements UserService{
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Result<Object> save(User user) throws Exception{
-		Result<Object> result = new Result<Object>();
+	public ResultStatus save(User user) {
 		userMapper.insert(user);
-		result.setCode(ResultStatus.SUCCESS).setData(user);
-		return result;
+		this.insertAnotherOne();// 测试事务
+		return ResultStatus.SUCCESS;
+	}
+
+	//@Transactional(propagation = Propagation.SUPPORTS)
+	public ResultStatus insertAnotherOne() {
+		User user = new User();
+		user.setUserName("测试B事务的一条数据");
+		user.setPhone("13150583605");
+		user.setPassword("13150583605");
+		userMapper.insert(user);
+		
+		int i = 1 / 0;
+		return ResultStatus.SUCCESS;
 	}
 
 	@Override
@@ -45,7 +56,7 @@ public class UserServiceBean implements UserService{
 		return list;
 	}
 
-	//事务 support 支持当前事务，如果没有，则以非事务执行 required:支持当前事务，如果当前没有事务，就新建一个事务 默认
+	// 事务 support 支持当前事务，如果没有，则以非事务执行 required:支持当前事务，如果当前没有事务，就新建一个事务 默认
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, isolation = Isolation.DEFAULT)
 	public Result<List<User>> findByAttribute(String attribute) {
