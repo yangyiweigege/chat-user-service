@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chat.springboot.common.StringUtils;
+import com.chat.springboot.common.annotation.AutowireUser;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
+import com.user.springboot.domain.RequestHolder;
 import com.user.springboot.domain.UserInfo;
 import com.user.springboot.service.RedisService;
 import com.user.springboot.service.UserInfoService;
@@ -94,13 +95,9 @@ public class UserInfoController {
 		@ApiImplicitParam(name = "token", value = "用户令牌", required = true, dataType = "String", paramType = "query")
 	})
 	@RequestMapping(value = "/edit/sign", method = { RequestMethod.POST, RequestMethod.GET })
-	@ValidateAttribute(attributes = { "token" })
+	@ValidateAttribute(attributes = { "sign" })
 	public ResponseResult<?> editSign(String sign, String token) {
-		if (StringUtils.isBlank(sign)) {
-			return new ResponseResult<>(ResultStatus.LACK_PARAM).setData("签名不能为空");
-		}
-		UserInfo userInfo = redisService.getUserInfoByToken(token);
-		return new ResponseResult<>(userInfoService.updateSignById(userInfo.getId(), sign));
+		return new ResponseResult<>(userInfoService.updateSignById(RequestHolder.USER_INFO.get().getId(), sign));
 	}
 
 	/**
@@ -111,13 +108,9 @@ public class UserInfoController {
 	@ApiOperation(value = "根据用户id获取获取信息")
 	@ApiImplicitParam(name = "token", value = "用户令牌", required = true, dataType = "String", paramType = "query")
 	@RequestMapping(value = "/load/one", method = { RequestMethod.GET })
-	@ValidateAttribute(attributes = { "token" })
-	public ResponseResult<UserInfo> loadOne(String token) {
-		UserInfo userInfo = redisService.getUserInfoByToken(token);
-		if (userInfo == null) {
-			return new ResponseResult<UserInfo>(ResultStatus.USER_IS_NULL);
-		}
-		return new ResponseResult<UserInfo>(ResultStatus.SUCCESS, userInfoService.loadUserById(userInfo.getId()));
+	@AutowireUser("token")
+	public ResponseResult<UserInfo> loadOne() {
+		return new ResponseResult<UserInfo>(ResultStatus.SUCCESS, userInfoService.loadUserById(RequestHolder.USER_INFO.get().getId()));
 	}
 
 }

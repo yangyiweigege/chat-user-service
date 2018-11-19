@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.domain.UserInfo;
 import com.user.springboot.service.RedisService;
 

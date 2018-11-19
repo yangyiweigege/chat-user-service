@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * Q    Q: 2873824885
  * </pre>
  */
-@ControllerAdvice
+//@ControllerAdvice
 @Slf4j
 public class ExceptionHandleAop {
 

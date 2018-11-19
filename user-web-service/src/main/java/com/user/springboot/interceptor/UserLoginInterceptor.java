@@ -1,5 +1,7 @@
 package com.user.springboot.interceptor;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
@@ -44,6 +46,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		logger.info("执行session校验.......");
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
