@@ -1,0 +1,7 @@
+thread.pool.core.size:6
+thread.pool.max.size:10
+thread.pool.queen.size:10
+thread.pool.keep.time:30
+
+
+ 
