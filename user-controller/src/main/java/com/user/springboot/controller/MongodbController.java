@@ -1,10 +1,16 @@
 package com.user.springboot.controller;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
-
-import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,18 +21,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chat.springboot.common.PageBean;
+import com.chat.springboot.common.TraceThreadPoolExecutor;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.annotation.ValidatePage;
-import com.user.springboot.domain.Person;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
 import com.mongodb.BasicDBObject;
+import com.user.springboot.domain.Person;
 import com.user.springboot.service.PersonService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -40,11 +49,19 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "mongodb-controoler", description = "mongodb控制层")
 @RestController
 @RequestMapping("/mongodb")
+@Slf4j
 public class MongodbController {
 	@Autowired
 	private PersonService personService;
 	@Autowired
 	private MongoTemplate mongoTemplate;
+    @Autowired
+    @Qualifier("threadPoolExecutor")
+    private ExecutorService executorService;
+  /*  @Autowired
+    @Qualifier("traceThreadPoolExecutor")
+	private ExecutorService treaceThreadPoolExecutor;*/
+	private Semaphore semaphore = new Semaphore(10);
 
 	/**
 	 * 新增一个人
@@ -95,10 +112,29 @@ public class MongodbController {
 	 * 返回所有人员
 	 * 
 	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
 	 */
 	@RequestMapping(value = "/find/all", method = { RequestMethod.GET, RequestMethod.POST })
-	public Result<Object> findAll() {
-		return personService.findAll();
+	public ResponseResult<List<Person>> findAll() throws InterruptedException, ExecutionException {
+		semaphore.acquire(); // 限制接口最大访问数10
+		CountDownLatch countDownLatch = new CountDownLatch(2);
+		Future<List<Person>> list1 = executorService.submit(() -> {
+			List<Person> persons = personService.findAll();
+			countDownLatch.countDown();
+			return persons;
+		});
+		Future<List<Person>> list2 = executorService.submit(() -> {
+			List<Person> persons = personService.findAll();
+			countDownLatch.countDown();
+			return persons;
+		});
+		countDownLatch.await(2000, TimeUnit.MILLISECONDS); // 两个任务做完往下执行,最好设置超时时间
+		List<Person> persons = new ArrayList<>();
+		persons.addAll(list1.get());
+		persons.addAll(list2.get());
+		semaphore.release();
+		return new ResponseResult<>(ResultStatus.SUCCESS, persons);
 	}
 
 	/**
@@ -122,16 +158,17 @@ public class MongodbController {
 	@RequestMapping(value = "/find/page", method = RequestMethod.GET)
 	@ValidatePage
 	@ApiOperation(value = "分页查询")
-	@ValidateAttribute(attributes = {"token"})
+	@ValidateAttribute(attributes = { "token" })
 	@ApiImplicitParams(value = {
 			@ApiImplicitParam(name = "pageSize", value = "分页尺寸", required = false, dataType = "Integer", paramType = "query"),
 			@ApiImplicitParam(name = "pageNo", value = "当前页数", required = false, dataType = "Integer", paramType = "query") })
 	public Result<PageBean<Person>> findByPage(Integer pageSize, Integer pageNo) {
 		return personService.findByPage(pageSize, pageNo);
 	}
-	
+
 	@RequestMapping(value = "/template")
 	public ResponseResult<?> mongoDBTemplateOid() {
+		int i = 1 / 0;
 		Query query = new Query();
 		query.addCriteria(new Criteria().and("_id").is("5b7ea3a93713660080efc229"));
 		List<BasicDBObject> bsonObject = mongoTemplate.find(query, BasicDBObject.class, "log");

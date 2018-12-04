@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chat.springboot.common.annotation.AutowireUser;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
+import com.user.springboot.domain.RequestHolder;
 import com.user.springboot.domain.UserInfo;
-import com.user.springboot.service.RedisService;
 import com.user.springboot.service.UserFriendService;
 
 import io.swagger.annotations.Api;
@@ -33,8 +34,7 @@ public class UserFriendController {
 
 	@Autowired
 	private UserFriendService userFriendService;
-	@Autowired
-	private RedisService redisService;
+
 
 	@ApiOperation(value = "用户添加好友")
 	@ApiImplicitParams({
@@ -42,9 +42,9 @@ public class UserFriendController {
 			@ApiImplicitParam(name = "token", value = "用户令牌", required = false, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/add", method = { RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token", "friendId" })
-	public ResponseResult<?> addFirend(String friendId, String token) {
-		UserInfo userInfo = redisService.getUserInfoByToken(token);
-		return new ResponseResult<>(userFriendService.addFriend(userInfo.getId(), friendId));
+	@AutowireUser("token")
+	public ResponseResult<?> addFirend(String friendId) {
+		return new ResponseResult<>(userFriendService.addFriend(RequestHolder.USER_INFO.get().getId(), friendId));
 	}
 
 	@ApiOperation(value = "用户删除好友")
@@ -53,17 +53,17 @@ public class UserFriendController {
 			@ApiImplicitParam(name = "token", value = "用户令牌", required = false, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/remove", method = { RequestMethod.GET })
 	@ValidateAttribute(attributes = { "token", "friendId" })
-	public ResponseResult<?> removeFirend(String friendId, String token) {
-		UserInfo userInfo = redisService.getUserInfoByToken(token);
-		return new ResponseResult<>(userFriendService.removeFriend(userInfo.getId(), friendId));
+	@AutowireUser("token")
+	public ResponseResult<?> removeFirend(String friendId) {
+		return new ResponseResult<>(userFriendService.removeFriend(RequestHolder.USER_INFO.get().getId(), friendId));
 	}
 
 	@ApiOperation(value = "查询用户好友列表")
 	@ApiImplicitParam(name = "token", value = "用户令牌", required = false, dataType = "String", paramType = "query")
 	@RequestMapping(value = "/list", method = { RequestMethod.POST, RequestMethod.GET })
-	@ValidateAttribute(attributes = { "token" })
-	public ResponseResult<List<UserInfo>> getFriendListByUid(String token) {
-		List<UserInfo> userInfos = userFriendService.getFriendListByUid(redisService.getUserInfoByToken(token).getId());
+	@AutowireUser("token")
+	public ResponseResult<List<UserInfo>> getFriendListByUid() {
+		List<UserInfo> userInfos = userFriendService.getFriendListByUid(RequestHolder.USER_INFO.get().getId());
 		return new ResponseResult<>(ResultStatus.SUCCESS, userInfos);
 	}
 

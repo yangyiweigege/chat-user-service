@@ -12,6 +12,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 //import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 //import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -20,6 +21,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan("com.user.springboot.dao") // 配置mybatis-dao层扫描
 @EnableEurekaClient // 服务注册 
 @ServletComponentScan // servlete组件扫描
+@EnableScheduling // 定时任务配置开启
 // @EnableDiscoveryClient//发现服务
 // @EnableFeignClients//声明为feign
 // @EnableHystrixDashboard//监控断路情况

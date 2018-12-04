@@ -46,10 +46,10 @@ public class PersonServiceBean implements PersonService {
 	}
 
 	@Override
-	public Result<Object> findAll() {
+	public List<Person> findAll() {
 		Result<Object> result = new Result<Object>();
 		List<Person> list = personDao.findAll();
-		return result.setCode(ResultStatus.SUCCESS).setData(list);
+		return list;
 	}
 
 	@Override

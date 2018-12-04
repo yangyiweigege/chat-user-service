@@ -1,5 +1,8 @@
 package com.user.springboot.service;
 import com.user.springboot.domain.Person;
+
+import java.util.List;
+
 import com.chat.springboot.common.PageBean;
 import com.chat.springboot.common.response.Result;
 
@@ -30,7 +33,7 @@ public interface PersonService {
 	 * 查询所有人员
 	 * @return
 	 */
-	public Result<Object> findAll();
+	public List<Person> findAll();
 
 	/**
 	 * 根据id查询对应人员

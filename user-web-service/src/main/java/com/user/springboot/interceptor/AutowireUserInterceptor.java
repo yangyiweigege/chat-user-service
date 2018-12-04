@@ -16,7 +16,12 @@ import com.user.springboot.domain.RequestHolder;
 import com.user.springboot.domain.UserInfo;
 import com.user.springboot.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
-
+/**
+ * 将请求携带的token 写入本地线程 
+ * @author yangyiwei
+ * @date 2018年11月30日
+ * @time 下午4:35:37
+ */
 @Slf4j
 @Component
 public class AutowireUserInterceptor extends HandlerInterceptorAdapter {
@@ -48,6 +53,7 @@ public class AutowireUserInterceptor extends HandlerInterceptorAdapter {
 			}
 			log.info("{}方法需要提取用户数据.....线程id...", method.getName(), Thread.currentThread().getId());
 			RequestHolder.USER_INFO.set(userInfo);
+			RequestHolder.TOKEN.set(token);
 		}
 		return true;
 	}
@@ -73,7 +79,8 @@ public class AutowireUserInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		if (RequestHolder.USER_INFO.get() != null) {
 			log.info("清理本地线程中的用户信息.....");
-			RequestHolder.USER_INFO.remove();;// 清除本地线程中的数据,防止内存泄漏
+			RequestHolder.USER_INFO.remove();// 清除本地线程中的数据,防止内存泄漏
+			RequestHolder.TOKEN.remove();//清除token信息
 		}
 		return;
 	}

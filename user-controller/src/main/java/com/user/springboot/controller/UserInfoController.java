@@ -7,12 +7,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chat.springboot.common.annotation.AutowireUser;
 import com.chat.springboot.common.annotation.ValidateAttribute;
+import com.chat.springboot.common.annotation.ValidateJSON;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.domain.RequestHolder;
@@ -72,6 +74,7 @@ public class UserInfoController {
 	@ApiOperation(value = "用户登陆")
 	@ApiImplicitParam(name = "userInfo", value = "用户信息", required = true, dataType = "UserInfo", paramType = "form")
 	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
+	@ValidateJSON
 	public ResponseResult<?> login(@Valid UserInfo userInfo, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) { // spring-boot自带的校验
 			return new ResponseResult<>(ResultStatus.LACK_PARAM, bindingResult.getFieldError().getDefaultMessage());
@@ -92,11 +95,12 @@ public class UserInfoController {
 	@ApiOperation(value = "修改用户签名")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "sign", value = "用户签名", required = true, dataType = "String", paramType = "query"),
-		@ApiImplicitParam(name = "token", value = "用户令牌", required = true, dataType = "String", paramType = "query")
+		@ApiImplicitParam(name = "token", value = "用户令牌", required = true, dataType = "int", paramType = "query")
 	})
 	@RequestMapping(value = "/edit/sign", method = { RequestMethod.POST, RequestMethod.GET })
 	@ValidateAttribute(attributes = { "sign" })
-	public ResponseResult<?> editSign(String sign, String token) {
+	@AutowireUser("token")
+	public ResponseResult<?> editSign(String sign) {
 		return new ResponseResult<>(userInfoService.updateSignById(RequestHolder.USER_INFO.get().getId(), sign));
 	}
 
