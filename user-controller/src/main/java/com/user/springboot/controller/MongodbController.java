@@ -117,24 +117,29 @@ public class MongodbController {
 	 */
 	@RequestMapping(value = "/find/all", method = { RequestMethod.GET, RequestMethod.POST })
 	public ResponseResult<List<Person>> findAll() throws InterruptedException, ExecutionException {
-		semaphore.acquire(); // 限制接口最大访问数10
-		CountDownLatch countDownLatch = new CountDownLatch(2);
-		Future<List<Person>> list1 = executorService.submit(() -> {
-			List<Person> persons = personService.findAll();
-			countDownLatch.countDown();
-			return persons;
-		});
-		Future<List<Person>> list2 = executorService.submit(() -> {
-			List<Person> persons = personService.findAll();
-			countDownLatch.countDown();
-			return persons;
-		});
-		countDownLatch.await(2000, TimeUnit.MILLISECONDS); // 两个任务做完往下执行,最好设置超时时间
-		List<Person> persons = new ArrayList<>();
-		persons.addAll(list1.get());
-		persons.addAll(list2.get());
-		semaphore.release();
-		return new ResponseResult<>(ResultStatus.SUCCESS, persons);
+		try {
+			semaphore.acquire(); // 限制接口最大访问数10
+			CountDownLatch countDownLatch = new CountDownLatch(2);
+			Future<List<Person>> list1 = executorService.submit(() -> {
+				List<Person> persons = personService.findAll();
+				countDownLatch.countDown();
+				return persons;
+			});
+			Future<List<Person>> list2 = executorService.submit(() -> {
+				List<Person> persons = personService.findAll();
+				countDownLatch.countDown();
+				return persons;
+			});
+			countDownLatch.await(2000, TimeUnit.MILLISECONDS); // 两个任务做完往下执行,最好设置超时时间
+			List<Person> persons = new ArrayList<>();
+			persons.addAll(list1.get());
+			persons.addAll(list2.get());
+			
+			return new ResponseResult<>(ResultStatus.SUCCESS, persons);
+		} finally {
+			semaphore.release();
+		}
+		
 	}
 
 	/**
@@ -174,5 +179,21 @@ public class MongodbController {
 		List<BasicDBObject> bsonObject = mongoTemplate.find(query, BasicDBObject.class, "log");
 		System.out.println(bsonObject);
 		return new ResponseResult<>(ResultStatus.SUCCESS, bsonObject);
+	}
+	
+	@RequestMapping("/string")
+	public ResponseResult<String> returnString() {
+		return new ResponseResult<>(ResultStatus.SUCCESS, "hello world");
+	}
+	
+	@RequestMapping("/slow")
+	public ResponseResult<String> slow() {
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseResult<>(ResultStatus.SUCCESS, "hello world");
 	}
 }

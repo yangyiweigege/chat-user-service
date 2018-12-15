@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -14,6 +15,7 @@ import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.dao.UserMapper;
 import com.user.springboot.domain.User;
+import com.user.springboot.service.PersonService;
 import com.user.springboot.service.UserService;
 import com.github.pagehelper.PageHelper;
 
@@ -27,6 +29,9 @@ public class UserServiceBean implements UserService {
 	private UserMapper userMapper;
 	@Value("${server.port}")
 	private String port;
+	@Autowired
+	private PersonService personService;
+	
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -36,7 +41,7 @@ public class UserServiceBean implements UserService {
 		return ResultStatus.SUCCESS;
 	}
 
-	//@Transactional(propagation = Propagation.SUPPORTS)
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public ResultStatus insertAnotherOne() {
 		User user = new User();
 		user.setUserName("测试B事务的一条数据");

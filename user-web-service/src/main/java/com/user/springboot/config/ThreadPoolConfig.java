@@ -42,7 +42,7 @@ public class ThreadPoolConfig {
 		final AtomicInteger atomicInteger = new AtomicInteger();
 		return new ThreadPoolExecutor(coreSize, MaxSize, keepAliveTime, TimeUnit.SECONDS,
 				new ArrayBlockingQueue<>(waitSize),(Runnable r) -> {
-					Thread thread = new Thread(r, "mongodb-controller-pool-" + atomicInteger.incrementAndGet());
+					Thread thread = new Thread(r, "controller-pool-" + atomicInteger.incrementAndGet());
 					log.info("mongodb controller create thread....." + thread.getName());
 					return thread;
 				}, new ThreadPoolExecutor.CallerRunsPolicy() );

@@ -73,5 +73,7 @@ public interface UserService {
 	 * </pre>
 	 */
 	public Result<Object> findByName(String name);
+	
+	public ResultStatus insertAnotherOne();
 
 }

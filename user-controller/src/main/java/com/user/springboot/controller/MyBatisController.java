@@ -103,5 +103,10 @@ public class MyBatisController {
 		Result<Object> result = userService.findByName(name);
 		return result;
 	}
+	
+	@RequestMapping(value = "/insertAnother", method = { RequestMethod.GET, RequestMethod.POST })
+	public Result<Object> finsertAnother() {
+		return new Result<>(userService.insertAnotherOne());
+	}
 
 }

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,8 @@ import com.chat.springboot.common.annotation.ValidatePage;
  * </pre>
  */
 public class ValidatePageInterceptor extends HandlerInterceptorAdapter {
+	
+
 
 	private final static Logger logger = Logger.getLogger(HandlerInterceptorAdapter.class);
 
