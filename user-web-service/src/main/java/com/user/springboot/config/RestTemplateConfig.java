@@ -1,5 +1,6 @@
 package com.user.springboot.config;
-//import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -16,14 +17,15 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
     @Bean
+   // @LoadBalanced
     public RestTemplate restTemplate(ClientHttpRequestFactory factory){
         return new RestTemplate(factory);
     }
     
-/*	@Bean
+	@Bean
 	public AlwaysSampler defaultSampler() { //服务追踪
 		return new AlwaysSampler();
-	}*/
+	}
 
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory(){

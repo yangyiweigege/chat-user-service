@@ -1,23 +1,18 @@
 package com.user.springboot.interceptor;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import com.chat.springboot.common.annotation.ValidatePage;
 
 /**
  * <pre>
- * 功       能:校验参数拦截器 
+ * 功       能:校验分页参数 通过反射注入param分页请求参数
  * 涉及版本: V2.0.0 
  * 创  建  者: yangyiwei
  * 日       期: 2017年10月18日 下午6:38:34

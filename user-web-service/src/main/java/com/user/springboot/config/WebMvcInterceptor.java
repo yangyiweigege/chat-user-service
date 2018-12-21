@@ -31,10 +31,10 @@ public class WebMvcInterceptor extends WebMvcConfigurerAdapter {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new UserLoginInterceptor()).addPathPatterns("/**");//注册session校验
+		//registry.addInterceptor(new UserLoginInterceptor()).addPathPatterns("/**");//注册session校验
 		registry.addInterceptor(new ValidateAttributeInterceptor()).addPathPatterns("/**");//注册属性校验
-		registry.addInterceptor(new ValidateJSONInterceptor()).addPathPatterns("/**");//注册json数据校验拦截器
-		registry.addInterceptor(new ValidatePageInterceptor()).addPathPatterns("/**"); //注册分页信息添加
+		//registry.addInterceptor(new ValidateJSONInterceptor()).addPathPatterns("/**");//注册json数据校验拦截器
+		//registry.addInterceptor(new ValidatePageInterceptor()).addPathPatterns("/**"); //注册分页信息添加
 		registry.addInterceptor(autowireUserInterceptor).addPathPatterns("/**");//本地线程注入用户信息
 		super.addInterceptors(registry);//注册该拦截器
 	}

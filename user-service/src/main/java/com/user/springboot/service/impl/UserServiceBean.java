@@ -34,7 +34,7 @@ public class UserServiceBean implements UserService {
 	
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	//@Transactional(propagation = Propagation.REQUIRED)
 	public ResultStatus save(User user) {
 		userMapper.insert(user);
 		this.insertAnotherOne();// 测试事务

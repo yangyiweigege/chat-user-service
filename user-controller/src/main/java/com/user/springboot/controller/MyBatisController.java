@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chat.springboot.common.annotation.CheckPageBean;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.excel.ExcelUtil;
 import com.chat.springboot.common.response.ResponseResult;
@@ -65,9 +66,10 @@ public class MyBatisController {
 		return new ResponseResult<>(userService.save(user));
 	}
 
-	@RequestMapping(value = "/list/{currentPage}", method = { RequestMethod.GET, RequestMethod.POST })
-	public Result<List<User>> userList(@PathVariable("currentPage") Integer currentPage) {
-		List<User> list = userService.findList(currentPage);
+	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
+	@CheckPageBean(currentPage = "currentPage")
+	public Result<List<User>> userList(String currentPage) {
+		List<User> list = userService.findList(Integer.parseInt(currentPage));
 		return new Result<List<User>>(ResultStatus.SUCCESS, list);
 	}
 

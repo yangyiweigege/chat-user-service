@@ -1,7 +1,5 @@
 package com.user.springboot.interceptor;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 

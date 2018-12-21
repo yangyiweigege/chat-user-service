@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
+import com.alibaba.fastjson.JSONObject;
 import com.chat.springboot.common.response.ProjectException;
 import lombok.extern.slf4j.Slf4j;
 

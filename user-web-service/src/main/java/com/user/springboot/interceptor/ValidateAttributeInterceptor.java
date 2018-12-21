@@ -16,7 +16,7 @@ import com.chat.springboot.common.response.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 校验属性不为空字段拦截器
+ * 校验属性不为空字段拦截器(必须为普通请求 不可以是json请求)
  * 
  * @author yangyiwei
  * @date 2018年8月1日
