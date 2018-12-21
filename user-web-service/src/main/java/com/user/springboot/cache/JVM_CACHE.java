@@ -28,15 +28,7 @@ public class JVM_CACHE {
 	 */
 	public static Map<String, Integer> execSlowInterface = new ConcurrentHashMap<>();
 	
-	/**
-	 * 定义成品批缓存
-	 */
-	public static Map<String, Object> productionCache = new ConcurrentHashMap<>();
-	
-	/**
-	 * 定义生产批缓存
-	 */
-	public static Map<String, Object> productCache = new ConcurrentHashMap<>();
+
 
 
 	

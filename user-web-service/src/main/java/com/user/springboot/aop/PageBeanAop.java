@@ -72,8 +72,11 @@ public class PageBeanAop {
 
 				if (argsName[i].equals(checkPageBean.pageSize())) { // 如果参数名为pageNo校验是否为空
 					if (args[i] == null) { // 参数为空 赋值
-						// 此处应当判定具体类型
-						args[i] = 10;// 默认为10
+						if (argsType[i].getName().equals("java.lang.String")) {
+							args[i] = "10";
+						} else {
+							args[i] = 10;// 默认为
+						}
 					}
 				}
 			}
