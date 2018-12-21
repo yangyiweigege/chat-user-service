@@ -1,3 +1,4 @@
 *.class
 /target/
 /.project
+/chat-user-service.iml
