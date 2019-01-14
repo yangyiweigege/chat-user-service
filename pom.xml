@@ -13,8 +13,6 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
-		<module>chat-user-web-service</module>
-		<module>chat-user-controller</module>
 		<module>user-web-service</module>
 		<module>user-controller</module>
 		<module>user-service</module>

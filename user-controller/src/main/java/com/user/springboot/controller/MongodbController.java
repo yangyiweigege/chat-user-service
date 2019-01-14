@@ -1,14 +1,18 @@
 package com.user.springboot.controller;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import javax.validation.Valid;
+import com.chat.springboot.common.PageBean;
+import com.chat.springboot.common.annotation.ValidateAttribute;
+import com.chat.springboot.common.annotation.ValidatePage;
+import com.chat.springboot.common.response.ResponseResult;
+import com.chat.springboot.common.response.Result;
+import com.chat.springboot.common.response.ResultStatus;
+import com.mongodb.BasicDBObject;
+import com.user.springboot.domain.Person;
+import com.user.springboot.service.PersonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,23 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.chat.springboot.common.PageBean;
-import com.chat.springboot.common.TraceThreadPoolExecutor;
-import com.chat.springboot.common.annotation.ValidateAttribute;
-import com.chat.springboot.common.annotation.ValidatePage;
-import com.chat.springboot.common.response.ResponseResult;
-import com.chat.springboot.common.response.Result;
-import com.chat.springboot.common.response.ResultStatus;
-import com.mongodb.BasicDBObject;
-import com.user.springboot.domain.Person;
-import com.user.springboot.service.PersonService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * <pre>

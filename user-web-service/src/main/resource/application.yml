@@ -17,11 +17,11 @@ spring:
   #配置mongodb
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27017/spring-boot
+      uri: mongodb://192.168.15.117:27017/spring-boot
   #配置redis
   redis:
     database: 0
-    host: 192.168.31.71
+    host: 192.168.15.35
     port: 6379
     timeout: 0
     password: password
@@ -35,11 +35,11 @@ spring:
       #最小空闲
       min-idle: 0 
   #配置热部署工具   
-  devtools:
-    restart:
-      enabled: true
-      additional-paths: src/main/java
-      exclude: templates/**
+  #devtools:
+    #restart:
+     # enabled: true
+      #additional-paths: src/main/java
+     # exclude: templates/**
   #配置activeMQ
   #activemq:
     #broker-url: tcp://localhost:61616

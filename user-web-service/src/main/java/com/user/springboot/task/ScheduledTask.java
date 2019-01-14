@@ -29,7 +29,7 @@ public class ScheduledTask {
 	@Autowired
 	private JedisPool jedisPool;
 
-	@Scheduled(fixedRate = 1000 * 60)
+	@Scheduled(fixedRate = 1000 * 60 * 30)
 	public void showThreadPoolStatus() {
 		log.info("=====================监控线程池运行状况======================");
 		log.info("线程池任务总数:{},完成的任务数:{},线程池当前线程数:{},当前正在执行任务的线程数:{}" ,executorService.getTaskCount()
@@ -41,7 +41,7 @@ public class ScheduledTask {
 	 * 定期展示每个接口访问次数
 	 * 1000ms * 60s * 30
 	 */
-	@Scheduled(fixedRate = 1000 * 60 * 1)
+	@Scheduled(fixedRate = 1000 * 60 * 30)
 	public void showCountInterface() {
 		Map<String, String> execTimeMap = new HashMap<>();
 		Map<String, String> execSlowMap = new HashMap<>();

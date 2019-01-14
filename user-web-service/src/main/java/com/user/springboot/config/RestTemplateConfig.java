@@ -21,7 +21,11 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate(ClientHttpRequestFactory factory){
         return new RestTemplate(factory);
     }
-    
+
+    /**
+     * 开启链路追踪时所需要的bean
+     * @return
+     */
 	@Bean
 	public AlwaysSampler defaultSampler() { //服务追踪
 		return new AlwaysSampler();

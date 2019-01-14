@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -26,13 +27,14 @@ import com.chat.springboot.common.response.ResultStatus;
  * Q     Q: 2873824885
  * </pre>
  */
+@Slf4j
 public class ValidateBeanInterceptor extends HandlerInterceptorAdapter {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("执行validateBean拦截器!" + request.getClass().getName());
+		log.info("执行validateBean拦截器!" + request.getClass().getName());
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();

@@ -46,6 +46,9 @@ public class CodeExecTimeAop {
 	public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
 		long startTime = System.currentTimeMillis(); // 获取开始时间
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		if (attributes == null) { //如果获取不到url,则有可能是rpc调用，直接返回结果
+			return joinPoint.proceed(joinPoint.getArgs());
+		}
 		HttpServletRequest request = attributes.getRequest();
 		// 修改处理后的结果 然后调用 methon.invoke执行
 		Object retVal = joinPoint.proceed(joinPoint.getArgs());
@@ -55,7 +58,7 @@ public class CodeExecTimeAop {
 		log.info("用户ip地址:{},...访问的url:{},.....耗时:{}", url, request.getRequestURI(),
 				(endTime - startTime) + "ms");
 		if ((endTime - startTime) > 2000) { //执行时间较慢接口 记录下来
-			JVM_CACHE.execSlowInterface.put(url, (int)(endTime - startTime));
+			JVM_CACHE.execSlowInterface.put(url, (int) (endTime - startTime));
 			log.warn("{}接口比较耗时...建议优化....", url);
 		}
 		
@@ -64,6 +67,7 @@ public class CodeExecTimeAop {
 			synchronized (this) {
 				if (JVM_CACHE.countInterface.get(url) == null) { //为空则写入统计
 					JVM_CACHE.countInterface.put(url, new AtomicInteger(1));//第一次访问
+					log.info("接口:{}, 累计访问次数:{}",url ,1);
 				} else {
 					log.info("接口:{}, 累计访问次数:{}",url ,JVM_CACHE.countInterface.get(url).incrementAndGet());//原子类执行接口访问次数+1
 				}

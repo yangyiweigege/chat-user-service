@@ -13,7 +13,7 @@ import com.chat.springboot.common.response.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 捕捉代码异常
+ * 捕捉代码异常 但无法捕捉到拦截器异常
  * 
  * @author yangyiwei
  * @date 2018年11月19日

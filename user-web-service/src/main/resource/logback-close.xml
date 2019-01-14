@@ -23,7 +23,7 @@
 
 	<appender name="REDIS" class="com.cwbase.logback.RedisAppender">
 		<source>chat-web-app</source>
-		<host>192.168.31.105</host>
+		<host>192.168.15.35</host>
 		<port>6379</port>
 		<password>password</password>
 		<key>chat-web-log</key><!-- 写入的redis的key -->
