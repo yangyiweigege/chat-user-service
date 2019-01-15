@@ -1,7 +1,7 @@
-eureka:
- client:
-   serviceUrl:
-    defaultZone: http://192.168.31.71:8761/eureka/
+#eureka:
+ #client:
+   #serviceUrl:
+    #defaultZone: http://192.168.31.71:8761/eureka/
 server:
   #context-path: /spring-mybatis 不要随便起名字 否则注册完后 无法被发现
   port: 8123
@@ -51,6 +51,7 @@ spring:
 
 #配置日志
 logging:
+  #config: classpath:logback-close.xml #如果使用该配置 所有日志将写入redis
   path: /com/yangyiwei
   level:
     com.user.springboot: debug
