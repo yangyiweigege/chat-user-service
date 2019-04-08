@@ -1,4 +1,5 @@
 package com.user.springboot.controller;
+
 import com.chat.springboot.common.PageBean;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.annotation.ValidatePage;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ import java.util.concurrent.*;
  * Q    Q: 2873824885
  * </pre>
  */
-@Api(value = "mongodb-controoler", description = "mongodb控制层")
+@Api(value = "mongodb-controller", description = "mongodb控制层")
 @RestController
 @RequestMapping("/mongodb")
 @Slf4j
@@ -169,6 +171,7 @@ public class MongodbController {
 		query.addCriteria(new Criteria().and("_id").is("5b7ea3a93713660080efc229"));
 		List<BasicDBObject> bsonObject = mongoTemplate.find(query, BasicDBObject.class, "log");
 		System.out.println(bsonObject);
+		ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
 		return new ResponseResult<>(ResultStatus.SUCCESS, bsonObject);
 	}
 	

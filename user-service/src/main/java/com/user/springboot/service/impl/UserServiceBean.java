@@ -19,6 +19,8 @@ import com.user.springboot.service.PersonService;
 import com.user.springboot.service.UserService;
 import com.github.pagehelper.PageHelper;
 
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
@@ -31,17 +33,30 @@ public class UserServiceBean implements UserService {
 	private String port;
 	@Autowired
 	private PersonService personService;
+	@Autowired
+	private UserServiceBiz userServiceBiz;
 	
 
 	@Override
-	//@Transactional(propagation = Propagation.REQUIRED)
+	//@Transactional(propagation = Propagation.REQUIRED, isolation =  Isolation.READ_COMMITTED)
 	public ResultStatus save(User user) {
 		userMapper.insert(user);
-		this.insertAnotherOne();// 测试事务
+		/*System.out.println("当前线程id:" + Thread.currentThread().getName());
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+			@Override
+			public void afterCommit() {
+				System.out.println("事物执行 当前线程id:" + Thread.currentThread().getName());
+				System.out.println("事物执行完毕...");
+				int i = 1 / 0;
+			}
+
+		});*/
+		//userServiceBiz.insertAnotherOne();
+		//this.insertAnotherOne();// 测试事务
 		return ResultStatus.SUCCESS;
 	}
 
-	@Transactional(propagation = Propagation.SUPPORTS)
+	//@Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED)
 	public ResultStatus insertAnotherOne() {
 		User user = new User();
 		user.setUserName("测试B事务的一条数据");
@@ -54,7 +69,7 @@ public class UserServiceBean implements UserService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, isolation = Isolation.DEFAULT)
+	//@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, isolation = Isolation.DEFAULT)
 	public List<User> findList(Integer currentPage) {
 		PageHelper.startPage(currentPage, 2, false);
 		List<User> list = userMapper.selectAll();
@@ -63,7 +78,7 @@ public class UserServiceBean implements UserService {
 
 	// 事务 support 支持当前事务，如果没有，则以非事务执行 required:支持当前事务，如果当前没有事务，就新建一个事务 默认
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, isolation = Isolation.DEFAULT)
+	//@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, isolation = Isolation.DEFAULT)
 	public Result<List<User>> findByAttribute(String attribute) {
 		Result<List<User>> result = new Result<List<User>>();
 		Example example = new Example(User.class);

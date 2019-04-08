@@ -18,11 +18,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -39,7 +37,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 @PropertySource("classpath:redis.property")
 @EnableCaching
-public class RedisConfig extends CachingConfigurerSupport {
+public class  RedisConfig extends CachingConfigurerSupport {
 
 	@Bean(name = "jedisPool")
 	public JedisPool jedisPool(@Qualifier("jedisPoolConfig") JedisPoolConfig config,

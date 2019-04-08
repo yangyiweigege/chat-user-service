@@ -16,17 +16,17 @@ public class JVM_CACHE {
 	/**
 	 * 记录每个接口访问次数
 	 */
-	public static Map<String, Integer> errorInterface = new ConcurrentHashMap<>();
+	public static Map<String, Integer> ERROR_INTERFACE = new ConcurrentHashMap<>();
 	
 	/**
 	 * 记录每个接口访问次数
 	 */
-	public static Map<String, AtomicInteger> countInterface = new ConcurrentHashMap<>();
+	public static Map<String, AtomicInteger> COUNT_INTERFACE = new ConcurrentHashMap<>();
 
 	/**
 	 * 记录最近一次慢执行接口时间
 	 */
-	public static Map<String, Integer> execSlowInterface = new ConcurrentHashMap<>();
+	public static Map<String, Integer> EXEC_SLOW_INTERFACE = new ConcurrentHashMap<>();
 	
 
 

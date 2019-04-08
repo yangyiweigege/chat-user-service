@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/spring-boot?characterEncoding=utf8
-    username: yangyiwei
-    password: 123456
+    url: jdbc:mysql://localhost:3306/spring-boot?characterEncoding=utf8
+    username: root
+    password: 12345678
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
     maxActive: 20
@@ -17,7 +17,7 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
-    poolPreparedStatements: true
+    poolPr eparedStatements: true
     maxOpenPreparedStatements: 20
 
 mybatis:

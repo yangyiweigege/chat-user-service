@@ -17,11 +17,11 @@ spring:
   #配置mongodb
   data:
     mongodb:
-      uri: mongodb://192.168.15.117:27017/spring-boot
+      uri: mongodb://localhost:27017/spring-boot
   #配置redis
   redis:
     database: 0
-    host: 192.168.15.35
+    host: 127.0.0.1
     port: 6379
     timeout: 0
     password: password

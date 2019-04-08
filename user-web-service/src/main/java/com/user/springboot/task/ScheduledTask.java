@@ -1,6 +1,7 @@
 package com.user.springboot.task;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,13 @@ public class ScheduledTask {
 	public void showCountInterface() {
 		Map<String, String> execTimeMap = new HashMap<>();
 		Map<String, String> execSlowMap = new HashMap<>();
-		for (Map.Entry<String, AtomicInteger> item : JVM_CACHE.countInterface.entrySet()) {
+		for (Map.Entry<String, AtomicInteger> item : JVM_CACHE.COUNT_INTERFACE.entrySet()) {
 			log.info("接口:{}, 累计访问次数:{}", item.getKey(), item.getValue().get());
 			execTimeMap.put(item.getKey(), item.getValue().get() + "");
 		}
-		if (JVM_CACHE.execSlowInterface.size() != 0) {
+		if (JVM_CACHE.EXEC_SLOW_INTERFACE.size() != 0) {
 			log.info("======以下接口执行时间较长,最好能优化一下========");
-			for (Map.Entry<String, Integer> item : JVM_CACHE.execSlowInterface.entrySet()) {
+			for (Map.Entry<String, Integer> item : JVM_CACHE.EXEC_SLOW_INTERFACE.entrySet()) {
 				log.info("耗时接口:{}, 最近一次调用耗时:{}ms", item.getKey(), item.getValue());
 				execSlowMap.put(item.getKey(), item.getValue() + "");
 			}

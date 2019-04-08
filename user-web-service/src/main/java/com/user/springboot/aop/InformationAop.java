@@ -1,7 +1,9 @@
 package com.user.springboot.aop;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,16 @@ public class InformationAop {
 	 */
 	@Pointcut("execution(public * com.user.springboot.controller.UserInfoController.*(..))")
 	public void logPointCut() {
+
+	}
+
+	@Before("logPointCut()")
+	public void before(JoinPoint joinPoint) {
+		System.out.println("[Aspect1] before advise");
+		//try {int i = 1 / 0;
+		// } catch (Exception e) {
+		//   log.info("发生错误，跳过aop执行");
+		//}
 
 	}
 

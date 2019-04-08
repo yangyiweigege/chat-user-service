@@ -1,17 +1,4 @@
 package com.user.springboot.controller;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.chat.springboot.common.annotation.AutowireUser;
 import com.chat.springboot.common.annotation.ValidateAttribute;
 import com.chat.springboot.common.annotation.ValidateJSON;
@@ -21,11 +8,19 @@ import com.user.springboot.domain.RequestHolder;
 import com.user.springboot.domain.UserInfo;
 import com.user.springboot.service.RedisService;
 import com.user.springboot.service.UserInfoService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * 用户信息控制层

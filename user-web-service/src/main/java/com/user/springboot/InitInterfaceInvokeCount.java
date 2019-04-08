@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 初始化工作 可以在此类完成
+ */
 @Component
 @Slf4j
 public class InitInterfaceInvokeCount implements CommandLineRunner  {

@@ -34,7 +34,7 @@ public class DealExceptionAop {
 	 * Q    Q: 2873824885
 	 * </pre>
 	 */
-	@Pointcut("execution(public * com.user.springboot.controller.*.*(..))")
+	@Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping) || @annotation(org.springframework.web.bind.annotation.GetMapping) || @annotation(org.springframework.web.bind.annotation.PostMapping)")
 	public void dealExceptionAop () {
 
 	}

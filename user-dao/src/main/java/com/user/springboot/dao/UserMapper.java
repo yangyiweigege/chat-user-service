@@ -10,13 +10,13 @@ import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 public interface UserMapper extends MyMapper<User> {
 
-	// @Cacheable(value = "user")
+	@Cacheable(value = "user", key = "'users_'+#p0")
 	public User findByName(String userName);
 
 	/**
 	 * 使用注解缓存
 	 */
-	/*@Cacheable(value = "user", key = "'users_'+#p0")
+	@Cacheable(value = "user", key = "'users_'+#p0")
 	@SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
-	public User selectByPrimaryKey(Object key);*/
+	public User selectByPrimaryKey(Object key);
 }

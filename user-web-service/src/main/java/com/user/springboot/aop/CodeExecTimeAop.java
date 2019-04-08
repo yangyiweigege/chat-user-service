@@ -58,22 +58,22 @@ public class CodeExecTimeAop {
 		log.info("用户ip地址:{},...访问的url:{},.....耗时:{}", url, request.getRequestURI(),
 				(endTime - startTime) + "ms");
 		if ((endTime - startTime) > 2000) { //执行时间较慢接口 记录下来
-			JVM_CACHE.execSlowInterface.put(url, (int) (endTime - startTime));
+			JVM_CACHE.EXEC_SLOW_INTERFACE.put(url, (int) (endTime - startTime));
 			log.warn("{}接口比较耗时...建议优化....", url);
 		}
 		
 
-		if (JVM_CACHE.countInterface.get(url) == null) { //dcl确保每个接口写入 只初始化一次
+		if (JVM_CACHE.COUNT_INTERFACE.get(url) == null) { //dcl确保每个接口写入 只初始化一次
 			synchronized (this) {
-				if (JVM_CACHE.countInterface.get(url) == null) { //为空则写入统计
-					JVM_CACHE.countInterface.put(url, new AtomicInteger(1));//第一次访问
+				if (JVM_CACHE.COUNT_INTERFACE.get(url) == null) { //为空则写入统计
+					JVM_CACHE.COUNT_INTERFACE.put(url, new AtomicInteger(1));//第一次访问
 					log.info("接口:{}, 累计访问次数:{}",url ,1);
 				} else {
-					log.info("接口:{}, 累计访问次数:{}",url ,JVM_CACHE.countInterface.get(url).incrementAndGet());//原子类执行接口访问次数+1
+					log.info("接口:{}, 累计访问次数:{}",url ,JVM_CACHE.COUNT_INTERFACE.get(url).incrementAndGet());//原子类执行接口访问次数+1
 				}
 			}
 		} else { //初始化完成后，以后只需要统计次数
-			log.info("接口:{}, 累计访问次数:{}",url ,JVM_CACHE.countInterface.get(url).incrementAndGet());//原子类执行接口访问次数+1
+			log.info("接口:{}, 累计访问次数:{}",url ,JVM_CACHE.COUNT_INTERFACE.get(url).incrementAndGet());//原子类执行接口访问次数+1
 		}
 		
 		//这个地方 可以把接口名 执行时间 什么时候调用的 等信息 写入数据库

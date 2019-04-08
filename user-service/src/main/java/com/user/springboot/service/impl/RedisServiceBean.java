@@ -95,6 +95,8 @@ public class RedisServiceBean implements RedisService {
 	public String distributeLock() {
 		Jedis jedis = jedisPool.getResource();
 		jedis.select(15);
+		// 如果
+		jedis.set("a","a","NX","PX",10);
 		while (true) { // 没有锁 则一直等待 模拟分布式锁
 			if (jedis.setnx("lock", "1") == 1) {// 如果获得锁，则执行
 				jedis.expire("lock", 20);
