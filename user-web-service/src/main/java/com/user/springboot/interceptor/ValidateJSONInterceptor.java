@@ -37,15 +37,14 @@ public class ValidateJSONInterceptor extends HandlerInterceptorAdapter {
 				if (!request.getContentType().equals("application/json")) {
 					return true; //如果不是application/json请求 直接放行 不做处理
 				}
-				return false;
-				/*String json = getJsonDataForRequest(request);
+				String json = getJsonDataForRequest(request);
 				log.info("用户上传的JSON数据.....:{}", json);
 				String[] attributes = validateJSON.attributes();
 				if (attributes.length == 0) {
 					return true;// 放行
 				} else {  //此处进行jons数据校验
 					return true;
-				}*/
+				}
 			}
 			return true;
 		} // 方法结束

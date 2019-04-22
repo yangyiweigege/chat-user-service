@@ -1,28 +1,20 @@
 package com.user.springboot.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
+import com.github.pagehelper.PageHelper;
 import com.user.springboot.dao.UserMapper;
 import com.user.springboot.domain.User;
 import com.user.springboot.service.PersonService;
 import com.user.springboot.service.UserService;
-import com.github.pagehelper.PageHelper;
-
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 //@Transactional
@@ -33,8 +25,7 @@ public class UserServiceBean implements UserService {
 	private String port;
 	@Autowired
 	private PersonService personService;
-	@Autowired
-	private UserServiceBiz userServiceBiz;
+
 	
 
 	@Override

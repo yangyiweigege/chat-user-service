@@ -1,33 +1,25 @@
 package com.user.springboot.controller;
 
-import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSONObject;
 import com.chat.springboot.common.annotation.CheckPageBean;
 import com.chat.springboot.common.annotation.ValidateAttribute;
+import com.chat.springboot.common.annotation.ValidateJSON;
 import com.chat.springboot.common.excel.ExcelUtil;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.domain.User;
 import com.user.springboot.service.UserService;
-
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import sun.nio.cs.US_ASCII;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/mybatis")
@@ -40,8 +32,16 @@ public class MyBatisController {
     @Value("${server.port}")
     private String port;
 
+
+    @RequestMapping(value = "/xxx")
+    @ValidateJSON(attributes = {"userName", "age"})
+    public ResponseResult<?> xxx(@RequestBody User use) {
+        //abstractBean.xx();
+        return new ResponseResult<String>(ResultStatus.SUCCESS);
+    }
+
     @RequestMapping(value = "/generate")
-    public ResponseResult<?> generate() {
+    private ResponseResult<?> generate() {
         String string = "{\"name\":\"yangyiwei\"}";
         return new ResponseResult<String>(ResultStatus.SUCCESS, string);
     }
