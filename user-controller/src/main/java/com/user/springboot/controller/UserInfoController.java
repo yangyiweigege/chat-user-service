@@ -1,7 +1,7 @@
 package com.user.springboot.controller;
+
 import com.chat.springboot.common.annotation.AutowireUser;
 import com.chat.springboot.common.annotation.ValidateAttribute;
-import com.chat.springboot.common.annotation.ValidateJSON;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.domain.RequestHolder;
@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,7 +68,6 @@ public class UserInfoController {
 	@ApiOperation(value = "用户登陆")
 	@ApiImplicitParam(name = "userInfo", value = "用户信息", required = true, dataType = "UserInfo", paramType = "form")
 	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
-	@ValidateJSON
 	public ResponseResult<?> login(@Valid UserInfo userInfo, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) { // spring-boot自带的校验
 			return new ResponseResult<>(ResultStatus.LACK_PARAM, bindingResult.getFieldError().getDefaultMessage());

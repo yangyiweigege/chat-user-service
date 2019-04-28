@@ -3,7 +3,6 @@ package com.user.springboot.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.chat.springboot.common.annotation.CheckPageBean;
 import com.chat.springboot.common.annotation.ValidateAttribute;
-import com.chat.springboot.common.annotation.ValidateJSON;
 import com.chat.springboot.common.excel.ExcelUtil;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.Result;
@@ -13,10 +12,8 @@ import com.user.springboot.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -34,8 +31,7 @@ public class MyBatisController {
 
 
     @RequestMapping(value = "/xxx")
-    @ValidateJSON(attributes = {"userName", "age"})
-    public ResponseResult<?> xxx(@RequestBody User use) {
+    public ResponseResult<?> xxx(@RequestBody List<User> users) {
         //abstractBean.xx();
         return new ResponseResult<String>(ResultStatus.SUCCESS);
     }
