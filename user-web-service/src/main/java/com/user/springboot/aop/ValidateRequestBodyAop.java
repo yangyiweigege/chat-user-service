@@ -14,10 +14,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -63,7 +59,7 @@ public class ValidateRequestBodyAop {
                     if (object instanceof String) { //如果是字符串
 
                         JSONObject jsonObject = JSONObject.parseObject(object.toString());
-                        validateStringParam(jsonObject, attributes);
+                        CommonValidate.validateStringParam(jsonObject, attributes);
 
                     } else if (object instanceof Number) { //如果是包装类
 
@@ -75,7 +71,7 @@ public class ValidateRequestBodyAop {
                         validateListParam(jsonArray, attributes);
 
                     } else if (object instanceof Object) { //普通对象
-                        if (!checkObject2JSON(object)) {
+                        if (!CommonValidate.checkObject2JSON(object)) {
                             continue;
                         }
 
@@ -95,20 +91,7 @@ public class ValidateRequestBodyAop {
     }
 
 
-    /**
-     * 校验参数是String类型数据
-     */
-    private void validateStringParam(JSONObject jsonObject, String[] validateAttribute) {
-        for (String attribute : validateAttribute) {
-            if (jsonObject.get(attribute) == null) {
-                throw new ProjectException(10086, attribute + "属性不能为空!");
-            } else if (jsonObject.get(attribute) instanceof String) {
-                if (StringUtils.isBlank(jsonObject.getString(attribute))) {
-                    throw new ProjectException(10086, attribute + "属性不能为空字符串!");
-                }
-            }
-        }
-    }
+
 
     /**
      * 校验参数是list数据类型
@@ -120,7 +103,7 @@ public class ValidateRequestBodyAop {
         for (int x = 0; x < jsonArray.size(); x++) { //对每一项属性进行校验
             for (String attribute : validateAttribute) {
 
-                if (!checkObject2JSON(jsonArray.get(x))) {
+                if (!CommonValidate.checkObject2JSON(jsonArray.get(x))) {
                     continue;
                 }
 
@@ -165,30 +148,6 @@ public class ValidateRequestBodyAop {
 
     }
 
-    /**
-     * 判断Object能否序列化
-     *
-     * @param object
-     * @return
-     */
-    private boolean checkObject2JSON(Object object) {
-        if (object instanceof ServletRequest) {
-            return false;
-        }
-        if (object instanceof ServletResponse) {
-            return false;
-        }
-        if (object instanceof MultipartFile) {
-            return false;
-        }
-        if (object instanceof String) {
-            return false;
-        }
-        if (object instanceof Number) {
-            return false;
-        }
-        return true;
-    }
 
 
 }

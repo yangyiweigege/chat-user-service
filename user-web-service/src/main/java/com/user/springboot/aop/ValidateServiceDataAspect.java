@@ -130,7 +130,7 @@ public class ValidateServiceDataAspect {
 
                 } else if (params[i] instanceof Object) { //普通对象实例
 
-                    if (!checkObject2JSON(params[i])) {
+                    if (!CommonValidate.checkObject2JSON(params[i])) {
                         continue;
                     }
 
@@ -145,15 +145,7 @@ public class ValidateServiceDataAspect {
             }
         }
 
-        for (String attribute : attributes) {   // 从转换后的参数体 遍历所有校验项
-            if (paramJSON.get(attribute) == null) {
-                throw new ProjectException(10086, attribute + "属性不能为空!");
-            } else if (paramJSON.get(attribute) instanceof String) {
-                if (StringUtils.isBlank(paramJSON.getString(attribute))) {
-                    throw new ProjectException(10086, attribute + "属性不能为空字符串!");
-                }
-            }
-        }
+        CommonValidate.validateStringParam(paramJSON, attributes);
 
     }
 
@@ -236,30 +228,7 @@ public class ValidateServiceDataAspect {
         }
     }
 
-    /**
-     * 判断Object能否序列化
-     *
-     * @param object
-     * @return
-     */
-    private boolean checkObject2JSON(Object object) {
-        if (object instanceof ServletRequest) {
-            return false;
-        }
-        if (object instanceof ServletResponse) {
-            return false;
-        }
-        if (object instanceof MultipartFile) {
-            return false;
-        }
-        if (object instanceof String) {
-            return false;
-        }
-        if (object instanceof Number) {
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      * 校验String
@@ -301,7 +270,7 @@ public class ValidateServiceDataAspect {
         }
         for (int x = 0; x < jsonArray.size(); x++) {
 
-            if (!checkObject2JSON(jsonArray.get(x))) {
+            if (!CommonValidate.checkObject2JSON(jsonArray.get(x))) {
                 continue;
             }
 
@@ -354,7 +323,7 @@ public class ValidateServiceDataAspect {
         if (attributes.length == 0) {
             return;
         }
-        if (!checkObject2JSON(object)) {
+        if (!CommonValidate.checkObject2JSON(object)) {
             return;
         }
 
