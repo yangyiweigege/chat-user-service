@@ -41,7 +41,7 @@ public class CommonValidate {
     }
 
     /**
-     * 校验参数是String类型数据
+     * 校验参数是JSONObject对象
      */
     public static final void validateStringParam(JSONObject jsonObject, String[] validateAttribute) {
         for (String attribute : validateAttribute) {
