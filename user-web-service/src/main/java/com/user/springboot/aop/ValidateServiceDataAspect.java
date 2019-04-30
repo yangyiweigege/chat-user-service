@@ -27,7 +27,7 @@ import java.util.Map;
  * 校验业务逻辑层基本数据
  */
 @Aspect
-@Component
+//@Component
 @Slf4j
 public class ValidateServiceDataAspect {
 
@@ -178,7 +178,7 @@ public class ValidateServiceDataAspect {
                     } else if (params[i] instanceof Collection) { //集合类实例
 
                         PerItem perItem = (PerItem) annotations[i][j];
-                        checkObject(params[i], argsName[i], perItem.attributes());
+                        checkCollection((Collection) params[i], argsName[i], perItem.attributes());
 
                     } else {
                         log.warn("参数上存在@PerItem注解,但不是集合类型,跳过校验");

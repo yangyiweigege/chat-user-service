@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.chat.springboot.common.annotation.ValidateJSON;
+import com.chat.springboot.common.annotation.ValidateRequestBody;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,9 +29,9 @@ public class ValidateJSONInterceptor extends HandlerInterceptorAdapter {
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
-			ValidateJSON validateJSON = method.getAnnotation(ValidateJSON.class);
-			if (validateJSON != null) { // 执行参数拦截
-				log.info("此方法上存在 validateJSON注解...开始进行JSON属性校验.....");
+			ValidateRequestBody ValidateRequestBody = method.getAnnotation(ValidateRequestBody.class);
+			if (ValidateRequestBody != null) { // 执行参数拦截
+				log.info("此方法上存在 ValidateRequestBody注解...开始进行JSON属性校验.....");
 				//判定报头信息 是否是application/json
 				log.info("请求携带的报头信息:{}", request.getContentType());
 				if (!request.getContentType().equals("application/json")) {
@@ -39,7 +39,7 @@ public class ValidateJSONInterceptor extends HandlerInterceptorAdapter {
 				}
 				String json = getJsonDataForRequest(request);
 				log.info("用户上传的JSON数据.....:{}", json);
-				String[] attributes = validateJSON.attributes();
+				String[] attributes = ValidateRequestBody.attributes();
 				if (attributes.length == 0) {
 					return true;// 放行
 				} else {  //此处进行jons数据校验
