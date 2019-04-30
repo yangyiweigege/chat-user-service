@@ -316,10 +316,6 @@ public class ValidateServiceDataAspect {
             for (String attribute : attributes) { //校验参数项
                 if (item.get(attribute) == null) {
                     throw new ProjectException(10086, "Collection参数:" + argName + "的对象属性" + attribute + "不能为空");
-                } else if (item.get(attribute) instanceof String) {
-                    if (StringUtils.isBlank(item.getString(attribute))) { //字符串
-                        throw new ProjectException(10086, "Collection参数:" + argName + "的对象属性" + attribute + "不能为空字符串");
-                    }
                 }
             }
         }

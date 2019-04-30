@@ -14,7 +14,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -72,8 +75,17 @@ public class ValidateRequestBodyAop {
                         validateListParam(jsonArray, attributes);
 
                     } else if (object instanceof Object) { //普通对象
+                        if (!checkObject2JSON(object)) {
+                            continue;
+                        }
 
-                        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(object);
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = (JSONObject) JSONObject.toJSON(object);
+                        } catch (Exception e) {
+                            log.warn("在某些无法序列化的参数....跳过校验");
+                            continue;
+                        }
                         validateObjectParam(jsonObject, attributes);
 
                     }
@@ -108,16 +120,20 @@ public class ValidateRequestBodyAop {
         for (int x = 0; x < jsonArray.size(); x++) { //对每一项属性进行校验
             for (String attribute : validateAttribute) {
 
-                if (jsonArray.get(x) instanceof String || jsonArray.get(x) instanceof Number || jsonArray.get(x) instanceof Collection) { //基本数据类型 String list 无属性值校验
+                if (!checkObject2JSON(jsonArray.get(x))) {
                     continue;
                 }
 
-                if (jsonArray.getJSONObject(x).get(attribute) == null) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = jsonArray.getJSONObject(x);
+                } catch (Exception e) {
+                    log.warn("在某些无法序列化的参数....跳过校验");
+                    continue;
+                }
+
+                if (jsonObject.get(attribute) == null) {
                     throw new ProjectException(10086, attribute + "属性不能为空!");
-                } else if (jsonArray.getJSONObject(x).get(attribute) instanceof String) {
-                    if (StringUtils.isBlank(jsonArray.getJSONObject(x).getString(attribute))) {
-                        throw new ProjectException(10086, attribute + "属性不能为空字符串!");
-                    }
                 }
             }
         }
@@ -147,6 +163,31 @@ public class ValidateRequestBodyAop {
      */
     private void validatePackageParam() {
 
+    }
+
+    /**
+     * 判断Object能否序列化
+     *
+     * @param object
+     * @return
+     */
+    private boolean checkObject2JSON(Object object) {
+        if (object instanceof ServletRequest) {
+            return false;
+        }
+        if (object instanceof ServletResponse) {
+            return false;
+        }
+        if (object instanceof MultipartFile) {
+            return false;
+        }
+        if (object instanceof String) {
+            return false;
+        }
+        if (object instanceof Number) {
+            return false;
+        }
+        return true;
     }
 
 
