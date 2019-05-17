@@ -88,7 +88,7 @@ public class RestRequestController {
 	 */
 	@RequestMapping(value = "/get", method = { RequestMethod.POST, RequestMethod.GET })
 	public JSONObject getRequest() {
-		JSONObject result = restTemplate.getForObject("http://localhost:8000/rest/hello", JSONObject.class);
+		JSONObject result = restTemplate.getForObject("http://localhost:8080/hello/abc", JSONObject.class);
 		return result;
 	}
 

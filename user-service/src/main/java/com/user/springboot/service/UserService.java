@@ -2,6 +2,7 @@ package com.user.springboot.service;
 
 import java.util.List;
 
+import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.Result;
 import com.chat.springboot.common.response.ResultStatus;
 import com.user.springboot.domain.User;
@@ -26,7 +27,7 @@ public interface UserService {
 	 * </pre>
 	 * @throws Exception 
 	 */
-	public ResultStatus save(User user);
+	public ResponseResult<?> save(User user);
 
 	/**
 	 * <pre>
@@ -76,4 +77,8 @@ public interface UserService {
 	
 	public ResultStatus insertAnotherOne();
 
+	/**
+	 * 批量跟新
+	 */
+    void batchUpdate();
 }

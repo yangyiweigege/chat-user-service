@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,24 +31,15 @@ public class MyBatisController {
     private String port;
 
 
-    @RequestMapping(value = "/xxx")
-    public ResponseResult<?> xxx(@RequestBody List<User> users) {
-        //abstractBean.xx();
-        return new ResponseResult<String>(ResultStatus.SUCCESS);
+
+    @RequestMapping(value = "/batchUpdate", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseResult<?> batchUpdate() {
+
+        userService.batchUpdate();
+
+        return new ResponseResult<JSONObject>(ResultStatus.SUCCESS);
     }
 
-    @RequestMapping(value = "/generate")
-    private ResponseResult<?> generate() {
-        String string = "{\"name\":\"yangyiwei\"}";
-        return new ResponseResult<String>(ResultStatus.SUCCESS, string);
-    }
-
-    @RequestMapping(value = "/json")
-    public ResponseResult<?> getJSON(@RequestBody JSONObject jsonObject) {
-        log.info("jsonObject请求......");
-        jsonObject.put("port", port);
-        return new ResponseResult<JSONObject>(ResultStatus.SUCCESS, jsonObject);
-    }
 
     /**
      * 测试嵌套事务 比如serviceA中 调用a方法 a方法继续调用b方法 看能否回滚 的确可以回滚
@@ -56,17 +48,15 @@ public class MyBatisController {
      */
     @RequestMapping(value = "/transaction", method = {RequestMethod.GET, RequestMethod.POST})
     @ValidateAttribute(attributes = {"userName"})
-    //@Transactional
     public ResponseResult<?> testInnerTransaction(User user) {
         System.out.println("业务层：" + userService.getClass().getName());
-        //userService.save(user);
-        userService.insertAnotherOne();
-        return new ResponseResult<JSONObject>(ResultStatus.SUCCESS);
+        ResponseResult responseResult = userService.save(user);
+        return responseResult;
     }
 
     @RequestMapping(value = "/save", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseResult<?> saveUser(User user) throws Exception {
-        return new ResponseResult<>(userService.save(user));
+        return userService.save(user);
     }
 
     @RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})

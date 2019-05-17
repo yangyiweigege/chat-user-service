@@ -1,4 +1,4 @@
-package  com.user.springboot.aop;
+package com.user.springboot.aop;
 
 import com.chat.springboot.common.response.ProjectException;
 import com.chat.springboot.common.response.ResponseResult;
@@ -8,7 +8,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.Ordered;
+
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,8 +22,8 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @Slf4j
-//@Order(0) //确保异常捕捉机制属于最顶层,在事物回滚 或者 提交后 触发这个切面
-public class DealExceptionAop implements Ordered {
+@Order(Integer.MIN_VALUE) //确保异常捕捉机制属于最顶层,在事物回滚 或者 提交后 触发这个切面
+public class DealExceptionAop{
 
 	/**
 	 * 定义切入点 捕捉catchDubboException
@@ -62,8 +63,4 @@ public class DealExceptionAop implements Ordered {
 		
 	}
 
-	@Override
-	public int getOrder() {
-		return Integer.MIN_VALUE;
-	}
 }

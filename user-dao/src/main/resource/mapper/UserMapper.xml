@@ -11,4 +11,12 @@
   <select id="findByName" parameterType="String" resultMap="BaseResultMap">
   		select user_name,phone from t_user where user_name like '%${_parameter}%'
   </select>
+
+  <update id="batchUpdate" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" separator=";">
+      update t_user
+      set phone = #{item.phone}
+      where  user_id = #{item.userId}
+    </foreach>
+  </update>
 </mapper>

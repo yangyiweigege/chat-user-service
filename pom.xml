@@ -53,11 +53,12 @@
             </dependency>监控熔断情况 -->
         <!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-hystrix</artifactId>
             </dependency>配置断路器 -->
-        <!--<dependency> 服务注册
-            <groupId>org.springframework.cloud</groupId>
+        <!--服务注册-->
+       <!-- <dependency>
+        <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
-        </dependency>-->
-
+        </dependency>
+-->
         <!-- spring-boot单元测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

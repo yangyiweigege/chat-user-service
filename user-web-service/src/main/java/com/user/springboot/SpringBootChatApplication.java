@@ -27,7 +27,7 @@
 // @EnableFeignClients//声明为feign
 // @EnableHystrixDashboard//监控断路情况
 // @EnableHystrix
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class SpringBootChatApplication {
 
 	public static void main(String[] args) {
