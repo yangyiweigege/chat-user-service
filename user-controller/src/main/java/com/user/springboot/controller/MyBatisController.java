@@ -12,12 +12,16 @@ import com.user.springboot.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/mybatis")
@@ -29,6 +33,11 @@ public class MyBatisController {
     private UserService userService;
     @Value("${server.port}")
     private String port;
+    @Autowired
+    private TransactionClass transactionClass;
+    @Autowired
+    @Qualifier("threadPoolExecutor")
+    private ExecutorService executorService;
 
 
 
@@ -49,9 +58,9 @@ public class MyBatisController {
     @RequestMapping(value = "/transaction", method = {RequestMethod.GET, RequestMethod.POST})
     @ValidateAttribute(attributes = {"userName"})
     public ResponseResult<?> testInnerTransaction(User user) {
-        System.out.println("业务层：" + userService.getClass().getName());
-        ResponseResult responseResult = userService.save(user);
-        return responseResult;
+        System.out.println("业务层：" + transactionClass.getClass().getName());
+        transactionClass.insertAnotherOne();
+        return new ResponseResult<>();
     }
 
     @RequestMapping(value = "/save", method = {RequestMethod.GET, RequestMethod.POST})
@@ -104,5 +113,37 @@ public class MyBatisController {
     public Result<Object> finsertAnother() {
         return new Result<>(userService.insertAnotherOne());
     }
+
+
+    @RequestMapping(value = "/batch/task", method = {RequestMethod.GET, RequestMethod.POST})
+    public Result<Object> batchTask() throws Exception {
+        ArrayBlockingQueue<Integer> arrayBlockingQueue = new ArrayBlockingQueue<Integer>(100); //模拟100个任务
+        for (int i = 0; i < 10; i++) {
+            arrayBlockingQueue.add(i);
+        }
+        Future<?> future1 = executorService.submit(() -> {
+            while (!arrayBlockingQueue.isEmpty()) {
+                try {
+                    arrayBlockingQueue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Future<?> future2 = executorService.submit(() -> {
+            while (!arrayBlockingQueue.isEmpty()) {
+                try {
+                    arrayBlockingQueue.take(); //拿出任务 并且处理
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        future1.get();
+        future2.get();
+        return new Result<>(ResultStatus.SUCCESS);
+    }
+
+
 
 }
