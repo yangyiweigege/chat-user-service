@@ -44,6 +44,7 @@ public class RedisServiceBean implements RedisService {
 	public String execPipeLined() {
 		long startTime = System.currentTimeMillis();// 获取当前时间
 		Jedis jedis = jedisPool.getResource();
+		jedis.del("");
 		Pipeline pipeline = jedis.pipelined(); // redis管道技术
 		for (int i = 0; i < 1000; i++) {
 			pipeline.lpush("pipe", "管道测试:" + i);

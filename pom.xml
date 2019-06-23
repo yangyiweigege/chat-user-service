@@ -66,6 +66,17 @@
             <scope>test</scope>
         </dependency>
 
+
+
+        <!-- 配置对kafka的依赖-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>1.1.1.RELEASE</version>
+        </dependency>
+
+
+
         <!-- 配置对chat-common的依赖 集成了基础依赖 -->
         <dependency>
             <groupId>com.chat.springboot</groupId>

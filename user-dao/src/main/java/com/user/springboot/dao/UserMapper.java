@@ -18,8 +18,8 @@ public interface UserMapper extends MyMapper<User> {
 	/**
 	 * 使用注解缓存
 	 */
-	@Cacheable(value = "user", key = "'users_'+#p0")
-	@SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
+	//@Cacheable(value = "user", key = "'users_'+#p0")
+	//@SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
 	public User selectByPrimaryKey(Object key);
 
 
