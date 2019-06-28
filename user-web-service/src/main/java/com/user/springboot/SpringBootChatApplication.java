@@ -11,6 +11,11 @@
  import org.springframework.transaction.annotation.EnableTransactionManagement;
  import tk.mybatis.spring.annotation.MapperScan;
 
+ import java.util.concurrent.ExecutionException;
+ import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.Executors;
+ import java.util.concurrent.Future;
+
 //import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 //import org.springframework.cloud.netflix.feign.EnableFeignClients;
 //import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -30,7 +35,32 @@
 //@EnableTransactionManagement
 public class SpringBootChatApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringBootChatApplication.class, args);
+	public static void main(String[] args) throws ExecutionException, InterruptedException {
+	//	SpringApplication.run(SpringBootChatApplication.class, args);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        long satrt = System.currentTimeMillis();
+        executorService.submit(() -> {
+            try {
+                System.out.println("zhixing ......");
+                Thread.sleep(5000);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        Future future = executorService.submit(() -> {
+            try {
+                Thread.sleep(5000);
+                System.out.println("zhixing2 ......");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        future.get();
+        long end = System.currentTimeMillis();
+        System.out.println("wanchengshijian:" + (end - satrt));
+        executorService.shutdown();
+
 	}
 }

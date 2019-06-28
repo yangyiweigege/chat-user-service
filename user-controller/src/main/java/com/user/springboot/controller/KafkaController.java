@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,16 @@ public class KafkaController {
 
     @RequestMapping("/send")
     public ResponseResult<String> sendLog(String message) {
+
+       /* kafkaTemplate.send(new ProducerRecord<String, String>("congya", ""), new Callback() {
+            @Override
+            public void onCompletion(RecordMetadata metadata, Exception exception) {
+                if(exception != null){
+                    exception.printStackTrace();
+                }
+            }
+        });*/
+
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("message", message);
