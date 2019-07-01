@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by liuweiqiang on 2019-02-18.
+ *
  */
 @Aspect
 @Component
@@ -30,7 +31,7 @@ public class RepeatSubmitLimiterAspect {
     private Lock lock = new ReentrantLock();
 
     @Autowired
-    private RedisManager redisManager;
+    private Jedis jedis;
 
     private final String expression = "@annotation(com.tuya.crm.core.advice.RepeatSubmitLimiter)";
 
