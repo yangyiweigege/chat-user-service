@@ -1,8 +1,7 @@
 package com.user.springboot.controller;
 
-import com.tuya.crm.common.exception.BizException;
-import com.tuya.crm.common.exception.BizExceptionCode;
-import com.tuya.crm.core.common.RedisManager;
+import com.chat.springboot.common.response.ProjectException;
+import com.chat.springboot.common.response.ResultStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -45,13 +44,13 @@ public class RepeatSubmitLimiterAspect {
         HttpServletRequest request = getRequest();
         String reqId = request.getHeader("reqId");
         if (StringUtils.isEmpty(reqId)) {
-            throw new BizException(BizExceptionCode.REPEAT_SUBMIT_FORM_REQID_NOT_NULL);
+            throw new ProjectException(ResultStatus.DEFINE_ERROR);
         }
         // 获取对应的reqId,如果能够获取该reqId，就直接执行具体的业务逻辑
         boolean isFind = findReqId(reqId);
         // 获取对应的reqId,如果获取不到该reqId 直接返回请勿重复提交
         if (!isFind) {
-            throw new BizException(BizExceptionCode.REPEAT_SUBMIT_FORM_NOT_ALLOW);
+            throw new ProjectException(ResultStatus.DEFINE_ERROR);
         }
         Object proceed = proceedingJoinPoint.proceed();
         return proceed;
@@ -65,16 +64,9 @@ public class RepeatSubmitLimiterAspect {
 
 
     public boolean findReqId(String reqIdKey) {
-        // TODO @强哥 此处代码可能存在线程安全问题 但目前场景 几乎不会 以后优化 ---来自葱鸭的留言
-        try {
-            lock.lock();
-            String reqId = (String) redisManager.get(reqIdKey);
-            if (StringUtils.isEmpty(reqId)) {
-                return false;
-            }
-            redisManager.delete(reqId);
-        } finally {
-            lock.unlock();
+        long count = jedis.del(reqIdKey);
+        if (count < 1) { //第二次请求 不做处理
+            return false;
         }
         return true;
     }
