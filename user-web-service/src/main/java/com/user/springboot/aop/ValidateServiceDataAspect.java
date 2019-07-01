@@ -2,10 +2,10 @@ package com.user.springboot.aop;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.chat.springboot.common.annotation.CheckParam;
-import com.chat.springboot.common.annotation.PerItem;
 import com.chat.springboot.common.annotation.ValidateServiceData;
 import com.chat.springboot.common.response.ProjectException;
+import com.user.springboot.controller.CheckParam;
+import com.user.springboot.controller.PerItem;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -16,6 +16,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.lang.annotation.Annotation;
@@ -27,7 +28,7 @@ import java.util.Map;
  * 校验业务逻辑层基本数据
  */
 @Aspect
-//@Component
+@Component
 @Slf4j
 public class ValidateServiceDataAspect {
 
@@ -229,7 +230,6 @@ public class ValidateServiceDataAspect {
     }
 
 
-
     /**
      * 校验String
      *
@@ -285,6 +285,10 @@ public class ValidateServiceDataAspect {
             for (String attribute : attributes) { //校验参数项
                 if (item.get(attribute) == null) {
                     throw new ProjectException(10086, "Collection参数:" + argName + "的对象属性" + attribute + "不能为空");
+                } else if (item.get(attribute) instanceof String) {
+                    if (StringUtils.isBlank(item.getString(attribute))) { //字符串
+                        throw new ProjectException(10086, "Collection参数:" + argName + "的对象属性" + attribute + "不能为空字符串");
+                    }
                 }
             }
         }

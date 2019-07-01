@@ -2,7 +2,7 @@ package com.user.springboot.aop;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.chat.springboot.common.annotation.ValidateRequestBody;
+import com.chat.springboot.common.annotation.ValidateJSON;
 import com.chat.springboot.common.response.ProjectException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,12 +24,12 @@ import java.util.Collection;
 @Aspect
 @Component
 @Slf4j
-public class ValidateRequestBodyAop {
+public class ValidateJSONAspect {
 
     /**
      * 定义切入点
      */
-    @Pointcut("@annotation(com.chat.springboot.common.annotation.ValidateRequestBody)")
+    @Pointcut("@annotation(com.chat.springboot.common.annotation.ValidateJSON)")
     public void validateJSONPoint() {
 
     }
@@ -41,8 +41,8 @@ public class ValidateRequestBodyAop {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-        String[] attributes = method.getAnnotation(ValidateRequestBody.class).attributes();
-        if (attributes.length == 0) { // 未填写校验参数项
+        String[] attributes = method.getAnnotation(ValidateJSON.class).attributes();
+        if (attributes.length == 0) { // 未填写校验参数项 TODO 以后会兼容List.size > 0  对象 !=null 的校验
             return;
         }
 
@@ -53,7 +53,7 @@ public class ValidateRequestBodyAop {
                     Object object = params[i];
 
                     if (object == null) {
-                        throw new ProjectException(10086 ,attributes[i] + "不能为空!");
+                        throw new ProjectException(10086, "存在@RequestBody的对象不能为空!");
                     }
 
                     if (object instanceof String) { //如果是字符串
@@ -71,6 +71,7 @@ public class ValidateRequestBodyAop {
                         validateListParam(jsonArray, attributes);
 
                     } else if (object instanceof Object) { //普通对象
+
                         if (!CommonValidate.checkObject2JSON(object)) {
                             continue;
                         }
@@ -100,8 +101,10 @@ public class ValidateRequestBodyAop {
         if (jsonArray.size() == 0) {
             throw new ProjectException(10086, "批量操作最少需要一条数据");
         }
+
         for (int x = 0; x < jsonArray.size(); x++) { //对每一项属性进行校验
             for (String attribute : validateAttribute) {
+
 
                 if (!CommonValidate.checkObject2JSON(jsonArray.get(x))) {
                     continue;
@@ -115,8 +118,13 @@ public class ValidateRequestBodyAop {
                     continue;
                 }
 
+
                 if (jsonObject.get(attribute) == null) {
                     throw new ProjectException(10086, attribute + "属性不能为空!");
+                } else if (jsonObject.get(attribute) instanceof String) {
+                    if (StringUtils.isBlank(jsonObject.getString(attribute))) {
+                        throw new ProjectException(10086, attribute + "属性不能为空字符串!");
+                    }
                 }
             }
         }
@@ -145,9 +153,8 @@ public class ValidateRequestBodyAop {
      * 校验包装类型 直接跳过
      */
     private void validatePackageParam() {
-
+        //throw new ProjectException("10086", "不支持基本数据类型以及包装类");
     }
-
 
 
 }
