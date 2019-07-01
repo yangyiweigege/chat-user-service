@@ -1,12 +1,12 @@
-package com.user.springboot.controller;
-import com.tuya.crm.core.common.ContextUtils;
-import com.tuya.crm.core.entity.BaseDO;
+package com.user.springboot.aop;
+
+import com.user.springboot.domain.BaseDO;
+import com.user.springboot.domain.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
@@ -113,10 +113,10 @@ public class SetUserInterceptor implements Interceptor {
             baseDO.setIsDeleted("N");
         }
 
-        if (ContextUtils.getCurrentUser() == null) { //dubbo调用
+        if (RequestHolder.USER_INFO.get() == null) { //dubbo调用
             setCreateUser(baseDO, "system", 0L);
         } else {
-            setCreateUser(baseDO, ContextUtils.getCurrentUser().getNick(), ContextUtils.getCurrentUser().getId());
+            setCreateUser(baseDO, RequestHolder.USER_INFO.get().getUserName(), Long.parseLong(RequestHolder.USER_INFO.get().getId()));
         }
 
     }
@@ -141,10 +141,10 @@ public class SetUserInterceptor implements Interceptor {
             baseDO.setGmtModified(Calendar.getInstance().getTimeInMillis());
         }
 
-        if (ContextUtils.getCurrentUser() == null) { //dubbo调用
+        if (RequestHolder.USER_INFO.get() == null) { //dubbo调用
             setModifyUser(baseDO, "system", 0L);
         } else {
-            setModifyUser(baseDO, ContextUtils.getCurrentUser().getNick(), ContextUtils.getCurrentUser().getId());
+            setModifyUser(baseDO, RequestHolder.USER_INFO.get().getUserName(), Long.parseLong(RequestHolder.USER_INFO.get().getId()));
         }
 
 

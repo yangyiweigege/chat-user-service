@@ -1,4 +1,4 @@
-package com.user.springboot.controller;
+package com.user.springboot.annotation;
 
 import java.lang.annotation.*;
 

@@ -1,25 +1,21 @@
- package com.user.springboot;
+package com.user.springboot;
 
- import org.springframework.boot.SpringApplication;
- import org.springframework.boot.autoconfigure.SpringBootApplication;
- import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
- import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
- import org.springframework.boot.web.servlet.ServletComponentScan;
- import org.springframework.context.annotation.ComponentScan;
- import org.springframework.core.Ordered;
- import org.springframework.scheduling.annotation.EnableScheduling;
- import org.springframework.transaction.annotation.EnableTransactionManagement;
- import tk.mybatis.spring.annotation.MapperScan;
-
- import java.util.concurrent.*;
-
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import tk.mybatis.spring.annotation.MapperScan;
 //import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 //import org.springframework.cloud.netflix.feign.EnableFeignClients;
 //import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 //import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 
-@SpringBootApplication(exclude = { HibernateJpaAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class }) // spring-boot																										// 启动类
-@ComponentScan(basePackages = { "com.user.springboot" }) // 基本扫包配置
+@SpringBootApplication(exclude = {HibernateJpaAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class})
+// spring-boot																										// 启动类
+@ComponentScan(basePackages = {"com.user.springboot"}) // 基本扫包配置
 @MapperScan("com.user.springboot.dao") // 配置mybatis-dao层扫描
 //@EnableEurekaClient // 服务注册
 @ServletComponentScan // servlete组件扫描
@@ -29,18 +25,9 @@
 // @EnableFeignClients//声明为feign
 // @EnableHystrixDashboard//监控断路情况
 // @EnableHystrix
-//@EnableTransactionManagement
 public class SpringBootChatApplication {
 
-	public static void main(String[] args) {
-	//	SpringApplication.run(SpringBootChatApplication.class, args);
-        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(20);
-        while(arrayBlockingQueue.isEmpty()) {
-            try {
-                arrayBlockingQueue.take(); //限流
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootChatApplication.class, args);
+    }
 }
