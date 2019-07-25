@@ -45,7 +45,7 @@ public class GlobalLockAop {
         String lockPath = parseLockPath(joinPoint, method, distributedLock); //解析 锁定的key
 
         RLock lock = redisson.getLock(lockPath);
-        if (lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime() * 1000, TimeUnit.MILLISECONDS)) {
+        if (lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit())) {
             log.info("成功获取分布式锁...锁定的key:{}", lockPath);
             try {
                 return joinPoint.proceed();
@@ -71,7 +71,7 @@ public class GlobalLockAop {
     private String parseLockPath(ProceedingJoinPoint joinPoint, Method method, GlobalLock distributedLock) {
         String lockPath = distributedLock.path();
 
-        if (StringUtils.isBlank(lockPath)) {
+        if (StringUtils.isBlank(lockPath)) { // 如果未填写
             lockPath = joinPoint.getTarget().getClass().getSimpleName() + method.getName();
         }
 

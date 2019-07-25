@@ -44,14 +44,14 @@ public class RepeatSubmitLimiterAop {
         String reqId = request.getHeader("reqId");
         if (StringUtils.isEmpty(reqId)) {
             log.warn("请不要重复提交请求....!!!");
-            throw new ProjectException(ResultStatus.DEFINE_ERROR);
+            throw new ProjectException(12364, "请不要重复提交!");
         }
         // 获取对应的reqId,如果能够获取该reqId，就直接执行具体的业务逻辑
         boolean isFind = delReqId(reqId);
         // 获取对应的reqId,如果获取不到该reqId 直接返回请勿重复提交
         if (!isFind) {
             log.warn("请不要重复提交请求....!!!");
-            throw new ProjectException(ResultStatus.DEFINE_ERROR);
+            throw new ProjectException(12364, "请不要重复提交!");
         }
     }
 

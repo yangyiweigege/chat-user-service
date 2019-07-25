@@ -3,7 +3,6 @@ package com.user.springboot.annotation;
 import com.alibaba.fastjson.JSONObject;
 import com.chat.springboot.common.annotation.ValidateRequestBody;
 import com.chat.springboot.common.annotation.ValidateServiceData;
-import com.user.springboot.controller.CheckParam;
 import com.user.springboot.domain.User;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

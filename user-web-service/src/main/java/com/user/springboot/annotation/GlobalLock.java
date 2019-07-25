@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 分布式锁注解
+ * 可以实现更细力度的分布式锁
+ * key设计 为 path_key
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
@@ -26,7 +28,7 @@ public @interface GlobalLock {
     String key() default "";
 
     /**
-     * 尝试获取 锁 的等待时间
+     * 尝试获取锁的最大等待时间
      *
      * @return
      */
