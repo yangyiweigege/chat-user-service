@@ -1,12 +1,9 @@
 package com.user.springboot.aop;
 
 import com.chat.springboot.common.response.ProjectException;
-import com.chat.springboot.common.response.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import redis.clients.jedis.Jedis;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**

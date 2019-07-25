@@ -37,7 +37,6 @@ public class UserServiceBean implements UserService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, isolation =  Isolation.READ_COMMITTED)
-	@CatchDubboException
 	public ResponseResult save(User user) {
 		userMapper.insert(user);
 		log.info("执行到这里....");

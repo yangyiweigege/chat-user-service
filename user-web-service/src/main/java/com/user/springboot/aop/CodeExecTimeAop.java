@@ -1,25 +1,22 @@
 package com.user.springboot.aop;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
 import com.alibaba.fastjson.JSONObject;
+import com.user.springboot.cache.JVM_CACHE;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import com.user.springboot.cache.JVM_CACHE;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 监控每段代码执行时间
@@ -56,6 +53,8 @@ public class CodeExecTimeAop {
 			return joinPoint.proceed(joinPoint.getArgs());
 		}
 		HttpServletRequest request = attributes.getRequest();
+
+
 		//打印出 方法入参
 		Object[] params = joinPoint.getArgs();
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -74,6 +73,7 @@ public class CodeExecTimeAop {
 			}
 			paramJson.put(argsName[i], param);
 		}
+
 		String paramResult = paramJson.toJSONString(); //在参数进入方法体之前 就先序列化
 		// 修改处理后的结果 然后调用 methon.invoke执行
 		Object retVal = joinPoint.proceed(params);
@@ -115,16 +115,5 @@ public class CodeExecTimeAop {
 	}
 
 
-	/**
-	 * 获取方法参数名
-	 *
-	 * @param method
-	 * @return
-	 */
-	private String[] getArgsName(Method method) {
-		LocalVariableTableParameterNameDiscoverer localVariableTableParameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
-		String[] argsName = localVariableTableParameterNameDiscoverer.getParameterNames(method);
-		return argsName;
-	}
 
 }
