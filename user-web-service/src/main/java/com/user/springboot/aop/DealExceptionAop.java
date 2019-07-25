@@ -4,20 +4,17 @@ import com.chat.springboot.common.response.ProjectException;
 import com.chat.springboot.common.response.ResponseResult;
 import com.chat.springboot.common.response.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
-
 /**
- * 捕捉代码异常 但无法捕捉到拦截器异常
+ * 捕捉代码异常 并且以 固定格式 返回出去
+ * 适用场景:
+ * dubbo服务提供方 某些接口抛出自定义业务异常
  * 
  * @author yangyiwei
  * @date 2018年11月19日
@@ -59,9 +56,7 @@ public class DealExceptionAop{
 
 			} else {
 				log.error("服务器发生未知错误======!!", e);
-			//	return "发生错误了.laotie ";
 				return new ResponseResult<>(ResultStatus.DATA_NOT_FIND);
-				//return CommonResult.newInstance("10086", "服务器发生未知异常,请联系开发人员");
 			}
 		}
 		

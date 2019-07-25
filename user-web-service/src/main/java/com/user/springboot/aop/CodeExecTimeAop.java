@@ -1,17 +1,25 @@
 package com.user.springboot.aop;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import com.user.springboot.cache.JVM_CACHE;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 监控每段代码执行时间
@@ -48,13 +56,41 @@ public class CodeExecTimeAop {
 			return joinPoint.proceed(joinPoint.getArgs());
 		}
 		HttpServletRequest request = attributes.getRequest();
+		//打印出 方法入参
+		Object[] params = joinPoint.getArgs();
+		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+		String[] argsName = signature.getParameterNames();
+		JSONObject paramJson = new JSONObject();
+		for (int i = 0; i < params.length; i++) {
+			Object param = params[i];
+			if (param instanceof ServletRequest) {  //无法序列化的参数 跳过序列化
+				continue;
+			}
+			if (param instanceof ServletResponse) {
+				continue;
+			}
+			if (param instanceof MultipartFile) {
+				continue;
+			}
+			paramJson.put(argsName[i], param);
+		}
+		String paramResult = paramJson.toJSONString(); //在参数进入方法体之前 就先序列化
 		// 修改处理后的结果 然后调用 methon.invoke执行
-		Object retVal = joinPoint.proceed(joinPoint.getArgs());
+		Object retVal = joinPoint.proceed(params);
 		long endTime = System.currentTimeMillis(); // 获取结束时间
 		// 记录接口被访问频率 以及代码执行时间
 		String url = request.getRequestURI();
-		log.info("用户ip地址:{},...访问的url:{},.....耗时:{}", url, request.getRequestURI(),
-				(endTime - startTime) + "ms");
+		String responseResult = "";
+		try {
+			responseResult = JSONObject.toJSONString(retVal);
+		} catch (Exception e) {
+			responseResult = "序列化失败";
+			log.error("返回参数序列化失败....跳过");
+		}
+
+		log.info("用户ip地址:{}..访问的url:{}..请求参数:{}..返回结果:{}..耗时:{}", url, request.getRequestURI(), paramResult, responseResult,
+				(endTime - startTime) + "ms"); //也可以考虑 转换成JSON形式 方便排查问题.
+
 		if ((endTime - startTime) > 2000) { //执行时间较慢接口 记录下来
 			JVM_CACHE.EXEC_SLOW_INTERFACE.put(url, (int) (endTime - startTime));
 			log.warn("{}接口比较耗时...建议优化....", url);
@@ -76,6 +112,19 @@ public class CodeExecTimeAop {
 		
 		//这个地方 可以把接口名 执行时间 什么时候调用的 等信息 写入数据库
 		return retVal;
+	}
+
+
+	/**
+	 * 获取方法参数名
+	 *
+	 * @param method
+	 * @return
+	 */
+	private String[] getArgsName(Method method) {
+		LocalVariableTableParameterNameDiscoverer localVariableTableParameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+		String[] argsName = localVariableTableParameterNameDiscoverer.getParameterNames(method);
+		return argsName;
 	}
 
 }

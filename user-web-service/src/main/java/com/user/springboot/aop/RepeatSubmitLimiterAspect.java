@@ -39,7 +39,7 @@ public class RepeatSubmitLimiterAspect {
     }
 
     @Before("rlAop()")
-    public void doBefore(JoinPoint proceedingJoinPoint) throws Throwable {
+    public void doBefore(JoinPoint proceedingJoinPoint) {
         HttpServletRequest request = getRequest();
         String reqId = request.getHeader("reqId");
         if (StringUtils.isEmpty(reqId)) {

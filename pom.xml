@@ -25,6 +25,7 @@
         <spring-cloud.version>Edgware.SR3</spring-cloud.version>
         <elasticsearch.version>6.2.3</elasticsearch.version>
     </properties>
+
     <!-- 引入spring-cloud依赖 -->
     <dependencyManagement>
         <dependencies>
@@ -54,18 +55,17 @@
         <!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-hystrix</artifactId>
             </dependency>配置断路器 -->
         <!--服务注册-->
-       <!-- <dependency>
-        <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
-        </dependency>
--->
+        <!-- <dependency>
+         <groupId>org.springframework.cloud</groupId>
+             <artifactId>spring-cloud-starter-eureka</artifactId>
+         </dependency>
+ -->
         <!-- spring-boot单元测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
 
 
         <!-- 配置对kafka的依赖-->
@@ -76,12 +76,18 @@
         </dependency>
 
 
-
         <!-- 配置对chat-common的依赖 集成了基础依赖 -->
         <dependency>
             <groupId>com.chat.springboot</groupId>
             <artifactId>chat-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!--redis分布式锁 组件依赖-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>2.9.2</version>
         </dependency>
     </dependencies>
 
