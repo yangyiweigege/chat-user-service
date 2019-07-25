@@ -3,6 +3,8 @@ package com.user.springboot.aop;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+
 import java.lang.reflect.Method;
 
 /**
@@ -30,4 +32,17 @@ public class CommonJoinPointOperation {
         }
         return method;
     }
+
+    /**
+     * 获取方法参数名
+     *
+     * @param method
+     * @return
+     */
+    public static String[] getArgsName(Method method) {
+        LocalVariableTableParameterNameDiscoverer localVariableTableParameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+        String[] argsName = localVariableTableParameterNameDiscoverer.getParameterNames(method);
+        return argsName;
+    }
+
 }

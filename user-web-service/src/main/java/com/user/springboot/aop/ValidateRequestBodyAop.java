@@ -24,7 +24,7 @@ import java.util.Collection;
 @Aspect
 @Component
 @Slf4j
-public class ValidateJSONAspect {
+public class ValidateRequestBodyAop {
 
     /**
      * 定义切入点

@@ -26,7 +26,7 @@ import java.util.Map;
 @Aspect
 @Component
 @Slf4j
-public class ValidateServiceDataAspect {
+public class ValidateServiceDataAop {
 
     /**
      * 定义切入点 拦截所有带@ValidateServiceData注解的方法
@@ -49,12 +49,12 @@ public class ValidateServiceDataAspect {
         log.info("方法上存在ValidateServiceData注解.....执行方法参数校验....");
         if (method.getAnnotation(ValidateServiceData.class).openCheckParam()) { //开启参数校验
             log.info("开启checkParam注解...执行参数校验中....");
-            validateCheckParam(method, getArgsName(method), joinPoint.getArgs());
+            validateCheckParam(method, CommonJoinPointOperation.getArgsName(method), joinPoint.getArgs());
             return;
         }
 
         String[] attributes = method.getAnnotation(ValidateServiceData.class).attributes(); //获取校验项
-        String[] argsName = getArgsName(method); //获取参数名称
+        String[] argsName = CommonJoinPointOperation.getArgsName(method); //获取参数名称
         Object[] params = joinPoint.getArgs(); //获取参数对象
         if (attributes.length != 0) { //参数校验项 不为空 则校验基本数据
             validateAttributes(attributes, argsName, params);
@@ -65,17 +65,6 @@ public class ValidateServiceDataAspect {
     }
 
 
-    /**
-     * 获取方法参数名
-     *
-     * @param method
-     * @return
-     */
-    private String[] getArgsName(Method method) {
-        LocalVariableTableParameterNameDiscoverer localVariableTableParameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
-        String[] argsName = localVariableTableParameterNameDiscoverer.getParameterNames(method);
-        return argsName;
-    }
 
 
     /**

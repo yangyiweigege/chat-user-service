@@ -24,6 +24,7 @@ import io.swagger.annotations.Api;
 public class RestApiController {
 	
 	@RequestMapping(value = "/get", method = {RequestMethod.GET})
+
 	public ResponseResult<?> getRequest(String id) {
 		return new ResponseResult<>(ResultStatus.SUCCESS, "获取到的id是：" + id);
 	}

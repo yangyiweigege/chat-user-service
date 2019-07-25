@@ -1,5 +1,6 @@
 package com.user.springboot;
 
+import com.user.springboot.annotation.EnableGlobalLock;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
@@ -25,6 +26,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 // @EnableFeignClients//声明为feign
 // @EnableHystrixDashboard//监控断路情况
 // @EnableHystrix
+@EnableGlobalLock
 public class SpringBootChatApplication {
 
     public static void main(String[] args) {

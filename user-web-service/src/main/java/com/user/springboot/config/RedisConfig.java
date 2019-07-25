@@ -71,7 +71,7 @@ public class  RedisConfig extends CachingConfigurerSupport {
 									  @Value("${jedis.pool.password}") String password) {
 
 		Config config = new Config();
-		config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
+		config.useSingleServer().setAddress(host + ":" + port).setPassword(password);
 		//        config.useMasterSlaveServers().setMasterAddress("").setPassword("").addSlaveAddress(new String[]{"",""});
 
 		return Redisson.create(config);

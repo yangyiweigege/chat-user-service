@@ -25,7 +25,7 @@ public class ExceptionHandleAop {
 	@ExceptionHandler(value = Exception.class)
 	public ResponseResult<?> handle(Exception e) {
 		if (e instanceof ProjectException) {
-			log.error("出现了自定义错误-----！！！！", e);
+			log.warn("自定义业务异常:{}", e.getMessage());
 			ProjectException projectException = (ProjectException) e;
 			ResultStatus resultStatus = projectException.getResultStatus();
 			if (projectException.getDetailMsg() != null) {
