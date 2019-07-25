@@ -2,7 +2,7 @@ package com.user.springboot.aop;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.chat.springboot.common.annotation.ValidateJSON;
+import com.chat.springboot.common.annotation.ValidateRequestBody;
 import com.chat.springboot.common.response.ProjectException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ public class ValidateJSONAspect {
     /**
      * 定义切入点
      */
-    @Pointcut("@annotation(com.chat.springboot.common.annotation.ValidateJSON)")
+    @Pointcut("@annotation(com.chat.springboot.common.annotation.ValidateRequestBody)")
     public void validateJSONPoint() {
 
     }
@@ -41,7 +41,7 @@ public class ValidateJSONAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-        String[] attributes = method.getAnnotation(ValidateJSON.class).attributes();
+        String[] attributes = method.getAnnotation(ValidateRequestBody.class).attributes();
         if (attributes.length == 0) { // 未填写校验参数项 TODO 以后会兼容List.size > 0  对象 !=null 的校验
             return;
         }

@@ -31,7 +31,7 @@ public class RepeatSubmitLimiterAspect {
     @Autowired
     private Jedis jedis;
 
-    private final String expression = "@annotation(com.tuya.crm.core.advice.RepeatSubmitLimiter)";
+    private final String expression = "@annotation(com.user.springboot.annotation.RepeatSubmitLimiter)";
 
     // 拦截所有Controller
     @Pointcut(expression)

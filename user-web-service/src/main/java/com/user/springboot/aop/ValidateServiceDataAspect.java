@@ -41,7 +41,7 @@ public class ValidateServiceDataAspect {
     @Before("validateDataPoint()")
     public void before(JoinPoint joinPoint) {
 
-        Method method = getMethod(joinPoint);
+        Method method = CommonJoinPointOperation.getMethod(joinPoint);
         if (method.getAnnotation(ValidateServiceData.class) == null) { //如果cglib代理被关闭，此处无法获取到注解 放弃代理
             return;
         }
@@ -64,25 +64,6 @@ public class ValidateServiceDataAspect {
 
     }
 
-    /**
-     * 获取method对象
-     *
-     * @param joinPoint
-     * @return
-     */
-    private Method getMethod(JoinPoint joinPoint) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        // 如果是接口 则获取实现类
-        if (method.getDeclaringClass().isInterface()) {
-            try {
-                method = joinPoint.getTarget().getClass().getMethod(signature.getName(), method.getParameterTypes());
-            } catch (Exception e) {
-                log.error("lockPoint getMethod", e);
-            }
-        }
-        return method;
-    }
 
     /**
      * 获取方法参数名

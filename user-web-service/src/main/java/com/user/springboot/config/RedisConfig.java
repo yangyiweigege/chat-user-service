@@ -2,6 +2,9 @@ package com.user.springboot.config;
 
 import java.lang.reflect.Method;
 
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -62,6 +65,19 @@ public class  RedisConfig extends CachingConfigurerSupport {
 		return config;
 	}
 
+	@Bean(name = "redissonClient")
+	public RedissonClient getRedisson(@Value("${jedis.pool.host}")String host,
+									  @Value("${jedis.pool.port}") String port,
+									  @Value("${jedis.pool.password}") String password) {
+
+		Config config = new Config();
+		config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
+		//        config.useMasterSlaveServers().setMasterAddress("").setPassword("").addSlaveAddress(new String[]{"",""});
+
+		return Redisson.create(config);
+	}
+
+
 	
 	/* 定义缓存数据 key 生成策略的bean 包名+类名+方法名+所有参数 此方法不建议使用 因为返回的类是动态代理类*/
 	@Bean
@@ -78,7 +94,6 @@ public class  RedisConfig extends CachingConfigurerSupport {
 				return sb.toString();
 			}
 		};
-
 	}
 
 	/*
